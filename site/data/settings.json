@@ -1,0 +1,19 @@
+{
+  "site": {
+    "title": "UMMH Network",
+    "tagline": "Rapid News Updates",
+    "description": "Real-time news as it happens. Stay informed with UMMH Network.",
+    "primaryColor": "#FF6600",
+    "logo": "https://via.placeholder.com/200x60/FF6600/FFFFFF?text=UMMH+NETWORK"
+  },
+  "categories": [
+    {"id": "all", "name": "All Updates"},
+    {"id": "breaking", "name": "Breaking News"},
+    {"id": "politics", "name": "Politics"},
+    {"id": "tech", "name": "Technology"},
+    {"id": "business", "name": "Business"},
+    {"id": "sports", "name": "Sports"},
+    {"id": "health", "name": "Health"},
+    {"id": "entertainment", "name": "Entertainment"}
+  ]
+}

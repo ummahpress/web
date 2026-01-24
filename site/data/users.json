@@ -1,0 +1,28 @@
+{
+  "team": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "role": "Senior Editor & Founder",
+      "initials": "JD",
+      "bio": "Award-winning journalist with over 15 years of experience in investigative reporting and breaking news coverage.",
+      "social": {
+        "instagram": "#",
+        "tiktok": "#",
+        "upscrolled": "#"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "role": "Tech Correspondent & Co-Founder",
+      "initials": "SJ",
+      "bio": "Technology expert specializing in AI, cybersecurity, and emerging tech trends with 10+ years in tech journalism.",
+      "social": {
+        "instagram": "#",
+        "tiktok": "#",
+        "upscrolled": "#"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Global Climate Summit Reaches Historic Agreement",
+      "content": "World leaders have finalized a landmark climate agreement after intensive negotiations. The deal includes binding commitments from all major economies to reduce carbon emissions by 45% by 2030.",
+      "time": "5 min ago",
+      "category": "breaking",
+      "icon": "fas fa-globe-americas",
+      "author": "Sarah Chen",
+      "tags": ["Climate", "Politics", "Global"],
+      "breaking": true
+    },
+    {
+      "id": 2,
+      "title": "Tech Giant Unveils Revolutionary AI Assistant",
+      "content": "A major technology company has announced a breakthrough AI assistant capable of understanding context and nuance with unprecedented accuracy.",
+      "time": "22 min ago",
+      "category": "tech",
+      "icon": "fas fa-robot",
+      "author": "Marcus Johnson",
+      "tags": ["AI", "Technology", "Innovation"]
+    }
+  ]
+}

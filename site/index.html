@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMMH Network - Rapid News Updates</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-sidebar" id="close-sidebar">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="logo">
+            <img src="" alt="UMMH Network Logo" id="logo-image">
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="active" id="home-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" id="about-link">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-controls">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-bolt"></i> <span id="site-title">Rapid News Updates</span></h1>
+            </div>
+            <p id="site-tagline">Real-time news as it happens. Stay informed with UMMH Network.</p>
+        </div>
+
+        <!-- Category Tabs (Dynamically loaded from settings) -->
+        <div class="category-tabs" id="category-tabs"></div>
+
+        <!-- New Update Indicator -->
+        <div class="new-update-indicator" id="new-update-indicator">
+            <i class="fas fa-bell"></i> New updates available. Click to load.
+        </div>
+
+        <!-- Home Page -->
+        <div class="news-feed" id="home-page">
+            <div class="update-count">
+                <i class="fas fa-rss"></i> 
+                <span id="update-count">0</span> updates in the last hour
+                <span class="live-indicator"></span> LIVE
+            </div>
+            <div id="news-updates-container"></div>
+        </div>
+
+        <!-- About Page -->
+        <div class="about-page" id="about-page">
+            <!-- Filled by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Floating Refresh Button -->
+    <button class="floating-refresh-btn" id="floating-refresh-btn">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <!-- All JavaScript -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
