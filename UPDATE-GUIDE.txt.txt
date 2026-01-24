@@ -1,0 +1,178 @@
+UMMH NETWORK - UPDATE GUIDE
+===========================
+
+📍 QUICK START:
+✅ UPDATE NEWS: Edit /data/news.json
+✅ CHANGE DESIGN: Edit /css/styles.css
+✅ UPDATE PAGES: Edit /components/*.html
+
+📌 WHAT YOU CAN UPDATE IN GITHUB:
+
+1. ✅ NEWS CONTENT (Most Common)
+   File: /data/news.json
+   - Add, remove, or edit news articles
+   - Change categories, titles, authors, etc.
+
+   Example:
+   {
+     "id": 10,
+     "title": "YOUR HEADLINE HERE",
+     "content": "News content here...",
+     "time": "5 min ago",
+     "category": "breaking",
+     "icon": "fas fa-bullhorn",
+     "author": "Journalist Name",
+     "tags": ["Breaking", "Alert", "News"]
+   }
+
+2. ✅ STATIC PAGES CONTENT
+   File: /components/about.html - Update "About Us" page
+   File: /components/social.html - Update social media links
+
+3. ✅ WEBSITE STYLING & APPEARANCE
+   File: /css/styles.css
+   - Change colors, layout, fonts, animations
+   - Edit CSS variables in :root section
+
+   Example:
+   :root {
+     --primary: #007BFF;  /* Change orange to blue */
+     --light-bg: #F8F9FA; /* Light mode background */
+     --text: #212529;     /* Dark text */
+   }
+
+4. ✅ WEBSITE STRUCTURE & COMPONENTS
+   File: /components/sidebar.html - Update navigation
+   File: /components/header.html - Update header content
+   File: index.html - Update meta tags, titles, etc.
+
+5. ✅ FUNCTIONALITY & FEATURES
+   File: /js/app.js - Main functionality
+   File: /js/news-loader.js - News loading logic
+
+6. ✅ CONFIGURATION & SETTINGS
+   File: /package.json - Project configuration
+   File: README.md - Documentation
+
+📌 QUICK UPDATE GUIDE:
+
+TO ADD NEW NEWS ARTICLE:
+1. Go to: /data/news.json in GitHub
+2. Add a new object to the "updates" array:
+   {
+     "id": 11,  // Next number
+     "title": "Your Breaking News",
+     "content": "Full article content...",
+     "time": "Just now",
+     "category": "breaking",
+     "icon": "fas fa-bullhorn",
+     "author": "Your Name",
+     "tags": ["Breaking", "Important", "Alert"]
+   }
+
+TO CHANGE WEBSITE THEME:
+1. Go to: /css/styles.css
+2. Modify CSS variables in :root section
+3. Change colors, fonts, etc.
+
+TO UPDATE SOCIAL LINKS:
+1. Go to: /components/social.html
+2. Update URLs, handles, descriptions
+3. Add new social platforms if needed
+
+TO MODIFY NAVIGATION:
+1. Go to: /components/sidebar.html
+2. Add/remove menu items
+3. Update icons or labels
+
+📌 CATEGORY OPTIONS:
+Use these exact category names in news.json:
+- "breaking"      (Breaking News)
+- "politics"      (Politics)
+- "tech"          (Technology)
+- "business"      (Business)
+- "sports"        (Sports)
+- "health"        (Health)
+- "entertainment" (Entertainment)
+
+📌 TIME FORMAT OPTIONS:
+- "Just now"
+- "5 min ago"
+- "22 min ago"
+- "1 hour ago"
+- "Today, 10:30 AM"
+- "Yesterday"
+
+📌 ICON OPTIONS (Font Awesome):
+Use any Font Awesome icon class:
+- fas fa-globe-americas
+- fas fa-robot
+- fas fa-chart-line
+- fas fa-trophy
+- fas fa-heartbeat
+- fas fa-landmark
+- fas fa-shield-alt
+- fas fa-film
+- fas fa-bullhorn
+- fas fa-newspaper
+
+📌 GITHUB CMS WORKFLOW:
+
+1. UPDATE CONTENT IN GITHUB
+   ├── Edit /data/news.json → Change news
+   ├── Edit /css/styles.css → Change design
+   ├── Edit /components/ → Change pages
+   └── Edit /js/ → Change functionality
+
+2. COMMIT CHANGES
+   ├── Write commit message
+   ├── Commit to main branch
+   └── GitHub Pages auto-deploys
+
+3. VIEW LIVE SITE
+   ├── Visit your GitHub Pages URL
+   └── Changes appear in 1-2 minutes
+
+📌 MOST COMMON UPDATES:
+
+| What to Change        | File to Edit        | Frequency |
+|-----------------------|---------------------|-----------|
+| Add new article       | /data/news.json     | Daily     |
+| Update about info     | /components/about.html | Occasionally |
+| Change social links   | /components/social.html | Occasionally |
+| Modify colors         | /css/styles.css     | Rarely    |
+| Add new category      | index.html & js/app.js | Rarely |
+| Update meta tags      | index.html          | Once      |
+
+📌 TROUBLESHOOTING:
+
+Problem: Changes not showing up?
+Solution: Wait 2 minutes, clear browser cache (Ctrl+F5), then refresh.
+
+Problem: JSON file has errors?
+Solution: Use a JSON validator (jsonlint.com) before saving.
+
+Problem: Icons not displaying?
+Solution: Check icon class names are correct Font Awesome classes.
+
+Problem: Mobile menu not working?
+Solution: Ensure JavaScript files are loading correctly.
+
+📌 IMPORTANT NOTES:
+
+✅ YES - news.json is your MAIN CMS file for regular news updates
+✅ You can update ANY file in the structure when needed
+✅ 95% of your updates will be in news.json
+✅ Bookmark these GitHub file paths for quick access:
+   - /data/news.json
+   - /css/styles.css
+   - /components/about.html
+
+📌 LIVE SITE URL:
+https://[your-username].github.io/ummh-network/
+
+📌 PRO TIP:
+For quick updates, bookmark this direct edit link:
+https://github.com/yourusername/ummh-network/edit/main/data/news.json
+
+Last Updated: March 2024
