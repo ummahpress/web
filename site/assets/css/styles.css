@@ -33,7 +33,7 @@
 
         /* Sidebar - Desktop only */
         .sidebar {
-            width: 250px;
+            width: 220px;
             background-color: var(--dark-bg);
             border-right: 1px solid var(--border);
             position: fixed;
@@ -861,4 +861,5 @@
                 display: none !important;
             }
         }
+
     </style>
