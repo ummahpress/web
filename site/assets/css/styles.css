@@ -213,6 +213,8 @@
             transform: translateY(-2px) rotate(90deg);
         }
 
+        .p  {font-style: sans-serif  !immportant;}
+
         /* Scrollable Category Tabs */
         .category-tabs {
             display: flex;
@@ -866,6 +868,7 @@
         }
 
     </style>
+
 
 
 
