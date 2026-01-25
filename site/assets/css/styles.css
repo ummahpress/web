@@ -82,6 +82,7 @@
         .nav-menu {
             list-style: none;
             flex-grow: 1;
+            padding-left:0px;
         }
 
         .nav-item {
@@ -863,3 +864,4 @@
         }
 
     </style>
+
