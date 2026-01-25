@@ -155,6 +155,7 @@
             color: var(--text-light);
             margin-top: 5px;
             font-size: 0.95rem;
+            font-family: sans-serif;
         }
 
         .header-controls {
@@ -865,6 +866,7 @@
         }
 
     </style>
+
 
 
 
