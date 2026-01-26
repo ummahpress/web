@@ -537,7 +537,7 @@
             color: var(--accent);
             margin-bottom: 25px;
             font-size: 1.5rem;
-            display: flex;
+            /*display: flex;*/
             align-items: center;
             font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
         }
@@ -895,3 +895,4 @@
         }
 
     </style>
+
