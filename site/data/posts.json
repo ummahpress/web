@@ -5,7 +5,7 @@
       "title": "Massive Drilling Rig on Alaska, Toppled",
       "content": "An oil drilling rig named the Doyon 26 toppled over on Alaska's North Slope tundra Friday afternoon while in transit. Authorities report no serious injuries.",
       "date": "24/01/2026",
-      "category": ["breaking", "Global"],
+      "category":"breaking",
       "icon": "fas fa-globe-americas",
       "author": "Rizky Al Indunisi",
       "tags": ["Climate", "Politics", "Global"],
