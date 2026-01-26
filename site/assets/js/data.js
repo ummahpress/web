@@ -30,7 +30,7 @@ const DataManager = {
     getDefaultSettings() {
         return {
             site: {
-                title: "UMMH Network",
+                title: "UMMH PRESS",
                 tagline: "Rapid News Updates",
                 description: "Real-time news as it happens. Stay informed with UMMH Network.",
                 primaryColor: "#FF6600",
