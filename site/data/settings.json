@@ -1,10 +1,10 @@
 {
   "site": {
-    "title": "UMMH Network",
+    "title": "UMMH Press",
     "tagline": "Rapid News Updates",
-    "description": "Real-time news as it happens. Stay informed with UMMH Network.",
+    "description": "Real-time Rapid News Updates.",
     "primaryColor": "#FF6600",
-    "logo": "https://via.placeholder.com/200x60/FF6600/FFFFFF?text=UMMH+NETWORK"
+    "logo": "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png"
   },
   "categories": [
     {"id": "all", "name": "All Updates"},
