@@ -32,9 +32,9 @@ const DataManager = {
             site: {
                 title: "UMMH PRESS",
                 tagline: "Rapid News Updates",
-                description: "Real-time news as it happens. Stay informed with UMMH Network.",
+                description: "Real-time News Rapid Updates",
                 primaryColor: "#FF6600",
-                logo: "assets/images/logo.png"
+                logo: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png"
             },
             categories: [
                 {id: "all", name: "All Updates"},
