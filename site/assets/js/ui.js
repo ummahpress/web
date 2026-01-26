@@ -94,7 +94,7 @@ const UIManager = {
         aboutPage.innerHTML = `
             <h2 class="page-title"><i class="fas fa-info-circle"></i> About UMMAH Press</h2>
             <div class="about-content">
-                <p>Welcome to <strong>UMMAH Network</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
+                <p>Welcome to <strong>UMMAH Press</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
                 <p>Our mission is to ensure you're always informed with the latest developments across all major categories.</p>
                 <div class="features">
                     <h3><i class="fas fa-star"></i> What makes us different:</h3>
@@ -128,8 +128,8 @@ const UIManager = {
                     <div class="update-info">
                         <h3>${post.title}</h3>
                         <div class="update-meta">
-                            <div class="update-time"><i class="far fa-clock"></i> ${post.time}</div>
-                            <div class="update-author"><i class="fas fa-user-edit"></i> by ${post.author} | UMMH Network</div>
+                            <div class="update-date"><i class="far fa-calendar"></i> ${post.date}</div>
+                            <div class="update-author"><i class="fas fa-user-edit"></i> by ${post.author} | UMMAH Press</div>
                         </div>
                     </div>
                 </div>
