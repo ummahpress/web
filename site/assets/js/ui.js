@@ -92,9 +92,9 @@ const UIManager = {
         `).join('');
 
         aboutPage.innerHTML = `
-            <h2 class="page-title"><i class="fas fa-info-circle"></i> About UMMH Network</h2>
+            <h2 class="page-title"><i class="fas fa-info-circle"></i> About UMMAH Press</h2>
             <div class="about-content">
-                <p>Welcome to <strong>UMMH Network</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
+                <p>Welcome to <strong>UMMAH Network</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
                 <p>Our mission is to ensure you're always informed with the latest developments across all major categories.</p>
                 <div class="features">
                     <h3><i class="fas fa-star"></i> What makes us different:</h3>
