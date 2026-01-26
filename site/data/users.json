@@ -2,10 +2,10 @@
   "team": [
     {
       "id": 1,
-      "name": "John Doe",
-      "role": "Senior Editor & Founder",
-      "initials": "JD",
-      "bio": "Award-winning journalist with over 15 years of experience in investigative reporting and breaking news coverage.",
+      "name": "UMMAH Step",
+      "role": "Senior Correspondent, Commentator, Editor & Founder",
+      "initials": "US",
+      "bio": "Journalist and commentator, with extensive experience issues in MENA Region.",
       "social": {
         "instagram": "#",
         "tiktok": "#",
@@ -14,10 +14,10 @@
     },
     {
       "id": 2,
-      "name": "Sarah Johnson",
-      "role": "Tech Correspondent & Co-Founder",
-      "initials": "SJ",
-      "bio": "Technology expert specializing in AI, cybersecurity, and emerging tech trends with 10+ years in tech journalism.",
+      "name": "Rizky Al Indunisi",
+      "role": "International Correspondent, Digital Specialist & Co-Founder",
+      "initials": "R",
+      "bio": "International Correspondent and Journalist and also Digital Specialist of UMMH Press.",
       "social": {
         "instagram": "#",
         "tiktok": "#",
