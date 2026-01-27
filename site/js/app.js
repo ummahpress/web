@@ -1,4 +1,4 @@
-// Ummah Press App - Enhanced Version (Dark Theme Only)
+// Ummah Press App - Complete Version
 
 // DOM Elements
 const body = document.body;
@@ -154,7 +154,6 @@ function createTranslationButton(postId) {
 
 function openLanguagePopup(e) {
     const postId = e.currentTarget.dataset.postId;
-    const postCard = e.currentTarget.closest('.post-card');
     
     // Remove existing popup if any
     const existingPopup = document.querySelector('.language-popup');
@@ -464,7 +463,7 @@ function filterPostsByCategory(e) {
 }
 
 // =============================================
-// Team Members Rendering
+// Team Members Rendering (with Social Media)
 // =============================================
 
 function renderTeamMembers() {
@@ -473,11 +472,38 @@ function renderTeamMembers() {
     authors.forEach(author => {
         const memberElement = document.createElement('div');
         memberElement.className = 'team-member';
+        
+        let socialHTML = '';
+        if (author.social) {
+            socialHTML = `
+                <div class="member-social">
+                    ${author.social.tiktok ? `
+                        <a href="${author.social.tiktok}" target="_blank" class="member-social-icon" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    ` : ''}
+                    
+                    ${author.social.instagram ? `
+                        <a href="${author.social.instagram}" target="_blank" class="member-social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    ` : ''}
+                    
+                    ${author.social.upscrolled ? `
+                        <a href="${author.social.upscrolled}" target="_blank" class="member-social-icon" title="Upscrolled">
+                            <img src="https://ik.imagekit.io/ummahpress/G_pVEEvWYAA8qoX.png" alt="Upscrolled" class="upscrolled-icon-small">
+                        </a>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
         memberElement.innerHTML = `
             <img src="${author.avatar}" alt="${author.name}" class="member-avatar">
             <h3 class="member-name">${author.name}</h3>
             <div class="member-role">${author.role}</div>
             <p class="member-bio">${author.bio}</p>
+            ${socialHTML}
         `;
         teamMembersContainer.appendChild(memberElement);
     });
