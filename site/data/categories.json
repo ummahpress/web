@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "name": "World News",
+        "slug": "world-news",
+        "description": "Global news and international affairs",
+        "color": "#ff9800"
+    },
+    {
+        "id": 2,
+        "name": "Politics",
+        "slug": "politics",
+        "description": "Political news and analysis",
+        "color": "#2196f3"
+    },
+    {
+        "id": 3,
+        "name": "Technology",
+        "slug": "technology",
+        "description": "Tech news and innovations",
+        "color": "#4caf50"
+    },
+    {
+        "id": 4,
+        "name": "Health",
+        "slug": "health",
+        "description": "Health news and medical updates",
+        "color": "#e91e63"
+    },
+    {
+        "id": 5,
+        "name": "Education",
+        "slug": "education",
+        "description": "Educational news and developments",
+        "color": "#9c27b0"
+    },
+    {
+        "id": 6,
+        "name": "Business",
+        "slug": "business",
+        "description": "Business and economic news",
+        "color": "#ff5722"
+    },
+    {
+        "id": 7,
+        "name": "Sports",
+        "slug": "sports",
+        "description": "Sports news and updates",
+        "color": "#00bcd4"
+    },
+    {
+        "id": 8,
+        "name": "Entertainment",
+        "slug": "entertainment",
+        "description": "Entertainment news and reviews",
+        "color": "#ffc107"
+    },
+    {
+        "id": 9,
+        "name": "Science",
+        "slug": "science",
+        "description": "Scientific discoveries and research",
+        "color": "#3f51b5"
+    },
+    {
+        "id": 10,
+        "name": "Religion",
+        "slug": "religion",
+        "description": "Religious news and spiritual content",
+        "color": "#795548"
+    }
+]

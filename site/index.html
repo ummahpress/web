@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ummah Press: Rapid News Reporting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+</head>
+<body class="dark">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="sidebar-logo">
+                <img src="assets/images/logo-dark.png" alt="Ummah Press Logo" class="logo" id="logo">
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-page="home">
+                        <div class="nav-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="nav-text">Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" data-page="about">
+                        <div class="nav-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span class="nav-text">About</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="social-links">
+                <div class="social-title">Follow Us</div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fas fa-scroll"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="theme-toggle">
+                <div class="theme-switch-container">
+                    <button class="theme-switch-btn active" id="darkModeBtn">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark</span>
+                    </button>
+                    <button class="theme-switch-btn" id="lightModeBtn">
+                        <i class="fas fa-sun"></i>
+                        <span>Light</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="language-selector">
+                <div id="google_translate_element"></div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header" id="mainHeader">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="header-title-container">
+                    <h1 class="page-title" id="pageTitle">Ummah Press: Rapid News Update</h1>
+                </div>
+                
+                <div class="user-info">
+                    <span class="user-name" id="currentUserName">Ummah Press</span>
+                    <img src="assets/images/avatar-default.png" alt="User Avatar" class="user-avatar" id="currentUserAvatar">
+                </div>
+            </header>
+            
+            <!-- Home Page Content -->
+            <section id="homePage" class="page-content">
+                <div class="categories-section">
+                    <div class="categories-title">Categories</div>
+                    <div class="categories-container" id="categoriesContainer">
+                        <!-- Categories will be loaded dynamically -->
+                    </div>
+                </div>
+                
+                <div class="posts-section" id="postsContainer">
+                    <!-- Posts will be loaded dynamically -->
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner"></div>
+                        <p>Loading news...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- About Page Content -->
+            <section id="aboutPage" class="page-content hidden">
+                <div class="about-section">
+                    <h1 class="about-title">About Ummah Press</h1>
+                    
+                    <div class="team-section">
+                        <h2 class="team-title">Our Team</h2>
+                        
+                        <div class="team-members" id="teamMembers">
+                            <!-- Team members will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <footer class="footer">
+                <div class="footer-content">
+                    <p>&copy; <span id="currentYear"></span> Ummah Press. Developed by the Ummah Press Team.</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/google-translate.js"></script>
+    <script src="js/data-handler.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
