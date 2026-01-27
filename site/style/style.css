@@ -1,26 +1,15 @@
-/* Theme Variables */
+/* Theme Variables - Dark Theme Only */
 :root {
-    /* Light theme colors */
-    --bg-primary-light: #ffffff;
-    --bg-secondary-light: #f5f8fa;
-    --bg-sidebar-light: #ffffff;
-    --text-primary-light: #14171a;
-    --text-secondary-light: #657786;
-    --border-light: #e1e8ed;
-    --accent-light: #ff9800;
-    --card-bg-light: #ffffff;
-    --hover-light: #f5f8fa;
-    
     /* Dark theme colors */
-    --bg-primary-dark: #000000;
-    --bg-secondary-dark: #15202b;
-    --bg-sidebar-dark: #15202b;
-    --text-primary-dark: #ffffff;
-    --text-secondary-dark: #8899a6;
-    --border-dark: #38444d;
-    --accent-dark: #ff9800;
-    ---bg-dark: #192734;
-    --hover-dark: #1c2732;
+    --bg-primary: #000000;
+    --bg-secondary: #15202b;
+    --bg-sidebar: #15202b;
+    --text-primary: #ffffff;
+    --text-secondary: #8899a6;
+    --border: #38444d;
+    --accent: #ff9800;
+    --card-bg: #192734;
+    --hover: #1c2732;
     
     /* Common variables */
     --sidebar-width: 260px;
@@ -39,7 +28,6 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition: background-color var(--transition-speed), color var(--transition-speed);
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -171,47 +159,6 @@ body {
 
 .social-icon:hover {
     color: var(--accent);
-}
-
-/* Theme Toggle */
-.theme-toggle {
-    padding: 0 20px;
-    margin-bottom: 30px;
-}
-
-.theme-switch-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--hover);
-    border-radius: 30px;
-    padding: 5px;
-}
-
-.theme-switch-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 8px 0;
-    border: none;
-    background: none;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 25px;
-    transition: all var(--transition-speed);
-}
-
-.theme-switch-btn.active {
-    background-color: var(--accent);
-    color: white;
-}
-
-.theme-switch-btn i {
-    margin-right: 8px;
-    font-size: 16px;
 }
 
 /* Main Content */
@@ -485,7 +432,7 @@ body {
     padding: 12px 15px;
     cursor: pointer;
     transition: all 0.2s ease;
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border);
     font-size: 14px;
     color: var(--text-primary);
 }
@@ -720,10 +667,9 @@ body {
 }
 
 .view-media-btn {
-    background-color: #03ff0000;
+    background-color: transparent;
     color: white;
-    border: solid #1c2732 !important;
-    border: none;
+    border: 1px solid #1c2732;
     padding: 10px 18px;
     border-radius: 20px;
     font-size: 14px;
@@ -805,8 +751,8 @@ body {
 }
 
 .source-link:hover {
-    color: var(--hover);
-    border-bottom: 1px solid var(--hover);
+    color: white;
+    border-bottom: 1px solid white;
 }
 
 /* ============================================= */
@@ -842,7 +788,7 @@ body {
 }
 
 .read-more-btn:hover {
-    background-color: var(--hover);
+    background-color: white;
     color: var(--accent);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(255, 152, 0, 0.2);
@@ -855,10 +801,10 @@ body {
 }
 
 .view-media-btn:hover {
-    background-color: var(--hover);
+    background-color: var(--accent);
+    color: white;
     border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .read-more-btn i,
@@ -1088,30 +1034,6 @@ body {
 /* Utility Classes */
 .hidden {
     display: none !important;
-}
-
-.dark {
-    --bg-primary: var(--bg-primary-dark);
-    --bg-secondary: var(--bg-secondary-dark);
-    --bg-sidebar: var(--bg-sidebar-dark);
-    --text-primary: var(--text-primary-dark);
-    --text-secondary: var(--text-secondary-dark);
-    --border: var(--border-dark);
-    --accent: var(--accent-dark);
-    --card-bg: var(---bg-dark);
-    --hover: var(--hover-dark);
-}
-
-.light {
-    --bg-primary: var(--bg-primary-light);
-    --bg-secondary: var(--bg-secondary-light);
-    --bg-sidebar: var(--bg-sidebar-light);
-    --text-primary: var(--text-primary-light);
-    --text-secondary: var(--text-secondary-light);
-    --border: var(--border-light);
-    --accent: var(--accent-light);
-    --card-bg: var(--card-bg-light);
-    --hover: var(--hover-light);
 }
 
 /* ============================================= */
