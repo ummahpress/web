@@ -53,7 +53,24 @@ const categories = [
 
 // EMPTY POSTS ARRAY - START FRESH
 const posts = [
-    // Add your posts here following the structure below
+    {
+        id: 1,
+        authorId: 1,
+        date: "2023-11-15",
+        categories: ["Technology", "Business"],
+        title: "AI Breakthrough in Medical Diagnosis",
+        content: "Researchers have developed an AI system that can detect early signs of diseases with 95% accuracy. The system analyzes medical images and patient data to identify patterns invisible to the human eye.",
+        source: "Journal of Medical AI Research, Vol. 12, Issue 4",
+        takeaway: "AI could revolutionize early disease detection, potentially saving millions of lives through timely intervention.",
+        media: {
+            type: "image",
+            url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            caption: "AI analyzing medical imagery",
+            credit: "Photo by Medical Research Institute",
+            thumbnail: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
+        },
+        featured: true
+    }
 ];
 
 // =============================================
