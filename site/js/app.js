@@ -69,9 +69,10 @@ const posts = [
         takeaway: "The summit marks a crucial turning point in global climate policy, with unprecedented commitments from major economies.",
         media: {
             type: "image",
-            url: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            url: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "World leaders at the climate summit in Dubai",
-            credit: "Photo by United Nations"
+            credit: "Photo by United Nations",
+            thumbnail: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
         },
         featured: true
     },
@@ -87,9 +88,10 @@ const posts = [
         takeaway: "Quantum computing has reached a milestone where practical applications in medicine and cryptography are now within reach.",
         media: {
             type: "image",
-            url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+            url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
             caption: "Quantum processor chip",
-            credit: "Photo by IBM Research"
+            credit: "Photo by IBM Research",
+            thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=50"
         },
         featured: true
     },
@@ -106,9 +108,9 @@ const posts = [
         media: {
             type: "video",
             url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-            thumbnail: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
             caption: "Dr. Sarah Johnson explains the study findings",
-            credit: "NEJM Video Brief"
+            credit: "NEJM Video Brief",
+            thumbnail: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
         },
         featured: false
     },
@@ -124,9 +126,10 @@ const posts = [
         takeaway: "This program could bridge the gap between traditional Islamic education and modern academic requirements.",
         media: {
             type: "image",
-            url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Students in a modern Islamic classroom",
-            credit: "Photo by Education Initiative"
+            credit: "Photo by Education Initiative",
+            thumbnail: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
         },
         featured: true
     },
@@ -143,13 +146,88 @@ const posts = [
         media: {
             type: "video",
             url: "https://www.youtube.com/embed/9bZkp7q19f0",
-            thumbnail: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
             caption: "Championship final highlights",
-            credit: "Sports Network"
+            credit: "Sports Network",
+            thumbnail: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
         },
         featured: false
     }
 ];
+
+// =============================================
+// Modal/Overlay Functions
+// =============================================
+
+function openMediaModal(media) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('mediaModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'mediaModal';
+        modal.className = 'media-modal';
+        modal.innerHTML = `
+            <div class="modal-overlay" id="modalOverlay"></div>
+            <div class="modal-content">
+                <button class="modal-close-btn" id="modalCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-media-container" id="modalMediaContainer"></div>
+                <div class="modal-caption" id="modalCaption"></div>
+                <div class="modal-credit" id="modalCredit"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('modalOverlay').addEventListener('click', closeMediaModal);
+        document.getElementById('modalCloseBtn').addEventListener('click', closeMediaModal);
+        
+        // Escape key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeMediaModal();
+            }
+        });
+    }
+    
+    // Set media content
+    const mediaContainer = document.getElementById('modalMediaContainer');
+    const captionElement = document.getElementById('modalCaption');
+    const creditElement = document.getElementById('modalCredit');
+    
+    mediaContainer.innerHTML = '';
+    captionElement.textContent = '';
+    creditElement.textContent = '';
+    
+    if (media.type === 'image') {
+        mediaContainer.innerHTML = `
+            <img src="${media.url}" alt="${media.caption}" class="modal-image">
+        `;
+    } else if (media.type === 'video') {
+        mediaContainer.innerHTML = `
+            <div class="modal-video-container">
+                <iframe src="${media.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        `;
+    }
+    
+    captionElement.textContent = media.caption;
+    if (media.credit) {
+        creditElement.textContent = `📷 ${media.credit}`;
+    }
+    
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMediaModal() {
+    const modal = document.getElementById('mediaModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
 
 // =============================================
 // Helper Functions
@@ -205,25 +283,24 @@ function createPostElement(post, author) {
     
     let mediaHTML = '';
     if (post.media) {
-        if (post.media.type === 'image') {
-            mediaHTML = `
-                <div class="post-media">
-                    <img src="${post.media.url}" alt="${post.media.caption}" class="media-image">
-                    <div class="media-caption">${post.media.caption}</div>
-                    ${post.media.credit ? `<div class="media-credit">📷 ${post.media.credit}</div>` : ''}
+        const thumbnail = post.media.thumbnail || post.media.url;
+        const mediaIcon = post.media.type === 'video' ? '▶️' : '🖼️';
+        
+        mediaHTML = `
+            <div class="post-media-link" data-media-id="${post.id}">
+                <div class="media-thumbnail-container">
+                    <img src="${thumbnail}" alt="${post.media.caption}" class="media-thumbnail">
+                    ${post.media.type === 'video' ? '<div class="video-play-icon"><i class="fas fa-play"></i></div>' : ''}
                 </div>
-            `;
-        } else if (post.media.type === 'video') {
-            mediaHTML = `
-                <div class="post-media">
-                    <div class="video-container">
-                        <iframe src="${post.media.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="media-caption">${post.media.caption}</div>
-                    ${post.media.credit ? `<div class="media-credit">🎥 ${post.media.credit}</div>` : ''}
+                <button class="view-media-btn">
+                    <i class="fas fa-external-link-alt"></i> View Media
+                </button>
+                <div class="media-info">
+                    <span class="media-type">${mediaIcon} ${post.media.type.toUpperCase()}</span>
+                    <span class="media-caption-preview">${post.media.caption}</span>
                 </div>
-            `;
-        }
+            </div>
+        `;
     }
     
     postElement.innerHTML = `
@@ -263,6 +340,12 @@ function createPostElement(post, author) {
         
         <button class="read-more-btn" data-post-id="${post.id}">Read More</button>
     `;
+    
+    // Add click event to media link
+    if (post.media) {
+        const mediaLink = postElement.querySelector('.post-media-link');
+        mediaLink.addEventListener('click', () => openMediaModal(post.media));
+    }
     
     return postElement;
 }
