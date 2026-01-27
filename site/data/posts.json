@@ -1,16 +1,35 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "Massive Drilling Rig on Alaska, Toppled",
-      "content": "An oil drilling rig named the Doyon 26 toppled over on Alaska's North Slope tundra Friday afternoon while in transit. Authorities report no serious injuries.",
-      "date": "24/01/2026",
-      "category":"breaking",
-      "icon": "fas fa-globe-americas",
-      "author": "Rizky Al Indunisi",
-      "tags": ["Climate", "Politics", "Global"],
-      "breaking": true
-    }
-  
-  ]
+    "posts": [
+        {
+            "id": 1,
+            "title": "Global Climate Summit Reaches Historic Agreement",
+            "content": "World leaders have finalized a landmark climate agreement after intensive negotiations. The deal includes binding commitments from all major economies to reduce carbon emissions by 45% by 2030. This agreement comes after months of difficult negotiations and represents a major breakthrough in international climate policy. Experts are calling this the most significant climate agreement since the Paris Accord. The implementation will begin next year with regular progress reviews every six months.",
+            "time": "5 min ago",
+            "categories": ["breaking", "politics", "environment"],
+            "icon": "fas fa-globe-americas",
+            "author": "Sarah Chen",
+            "tags": ["Climate", "Politics", "Global"],
+            "breaking": true
+        },
+        {
+            "id": 2,
+            "title": "Tech Giant Unveils Revolutionary AI Assistant",
+            "content": "A major technology company has announced a breakthrough AI assistant capable of understanding context and nuance with unprecedented accuracy. Early demonstrations show it can handle complex multi-step tasks that previously required human intervention. The new AI system uses advanced neural networks and natural language processing to understand user intent and provide relevant responses.",
+            "time": "22 min ago",
+            "categories": ["tech", "innovation", "business"],
+            "icon": "fas fa-robot",
+            "author": "Marcus Johnson",
+            "tags": ["AI", "Technology", "Innovation"]
+        },
+        {
+            "id": 3,
+            "title": "Stock Markets Surge to Record Highs",
+            "content": "Global markets have reached all-time highs following positive economic indicators and strong corporate earnings. The tech sector led gains with an average increase of 4.2% across major indices. Analysts attribute the surge to strong quarterly earnings reports and optimistic economic forecasts.",
+            "time": "35 min ago",
+            "categories": ["business", "finance"],
+            "icon": "fas fa-chart-line",
+            "author": "David Park",
+            "tags": ["Markets", "Economy", "Finance"]
+        }
+    ]
 }
