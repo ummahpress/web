@@ -1,17 +1,16 @@
 [
-
     {
         "id": 1,
         "name": "Ummah Step",
-        "role": "Founder & Editor-in-Chief, Correspondent",
-        "avatar": "assets/images/avatar.png",
+        "role": "Founder & Editor-in-Chief",
+        "avatar": "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
         "bio": "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media. His passion for delivering accurate and timely news to the Muslim community drives the mission of Ummah Press."
     },
     {
         "id": 2,
         "name": "Rizky Al indunisi",
-        "role": "Digital Specialist & International Correspondent",
-        "avatar": "assets/images/avatar.png",
+        "role": "Chief Reporter",
+        "avatar": "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
         "bio": "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events. His dedication to truthful reporting and deep understanding of global affairs makes him an invaluable asset to our team."
     }
 ]
