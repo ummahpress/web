@@ -1,4 +1,4 @@
-// Ummah Press App - Enhanced Version
+// Ummah Press App - Enhanced Version (Dark Theme Only)
 
 // DOM Elements
 const body = document.body;
@@ -6,8 +6,6 @@ const sidebar = document.getElementById('sidebar');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
-const darkModeBtn = document.getElementById('darkModeBtn');
-const lightModeBtn = document.getElementById('lightModeBtn');
 const logo = document.getElementById('logo');
 const navLinks = document.querySelectorAll('.nav-link');
 const homePage = document.getElementById('homePage');
@@ -181,12 +179,11 @@ function openLanguagePopup(e) {
         </div>
     `;
     
-    // Position popup near the translate button
-    const btnRect = e.currentTarget.getBoundingClientRect();
+    // Position popup at bottom-right corner
     popup.style.position = 'fixed';
     popup.style.bottom = '20px';
     popup.style.right = '20px';
-    popup.style.zIndex = '1002';
+    popup.style.zIndex = '2000';
     
     document.body.appendChild(popup);
     
@@ -225,7 +222,7 @@ function translatePost(postId, languageCode) {
     const translation = translations[postId]?.[languageCode];
     
     // Find post card elements
-    const postCard = document.querySelector(`[data-post-id="${postId}"]`)?.closest('.post-card');
+    const postCard = document.querySelector(`.translate-btn[data-post-id="${postId}"]`)?.closest('.post-card');
     if (!postCard) return;
     
     // Update content with translation or fallback to original
@@ -274,6 +271,8 @@ function getAuthorById(id) {
 }
 
 function makeSourceClickable(source) {
+    if (!source) return '';
+    
     // Check if source is a URL
     const urlPattern = /(https?:\/\/[^\s]+)/g;
     if (urlPattern.test(source)) {
@@ -281,6 +280,7 @@ function makeSourceClickable(source) {
             return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="source-link">${url}</a>`;
         });
     }
+    
     // Check if source contains a domain without http
     const domainPattern = /\b(www\.[^\s]+|\b[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?)/gi;
     return source.replace(domainPattern, domain => {
@@ -292,7 +292,7 @@ function makeSourceClickable(source) {
 }
 
 function checkContentHeight(contentElement) {
-    const lineHeight = parseInt(getComputedStyle(contentElement).lineHeight);
+    const lineHeight = parseInt(getComputedStyle(contentElement).lineHeight) || 24;
     const maxHeight = lineHeight * 4; // 4 lines
     const actualHeight = contentElement.scrollHeight;
     
@@ -538,28 +538,6 @@ function renderCategories() {
 }
 
 // =============================================
-// Theme Management
-// =============================================
-
-function setTheme(theme) {
-    if (theme === 'light') {
-        body.classList.remove('dark');
-        body.classList.add('light');
-        darkModeBtn.classList.remove('active');
-        lightModeBtn.classList.add('active');
-        logo.src = 'https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG';
-    } else {
-        body.classList.remove('light');
-        body.classList.add('dark');
-        lightModeBtn.classList.remove('active');
-        darkModeBtn.classList.add('active');
-        logo.src = 'https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002';
-    }
-    
-    localStorage.setItem('ummahpress-theme', theme);
-}
-
-// =============================================
 // Sidebar Management
 // =============================================
 
@@ -586,10 +564,6 @@ async function initApp() {
     // Load data from JSON files
     await loadData();
     
-    // Set theme
-    const savedTheme = localStorage.getItem('ummahpress-theme') || 'dark';
-    setTheme(savedTheme);
-    
     // Set active page
     setActivePage('home');
     
@@ -597,9 +571,6 @@ async function initApp() {
     sidebarCloseBtn.addEventListener('click', closeSidebar);
     mobileMenuToggle.addEventListener('click', openSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
-    
-    darkModeBtn.addEventListener('click', () => setTheme('dark'));
-    lightModeBtn.addEventListener('click', () => setTheme('light'));
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
