@@ -1,0 +1,42 @@
+{
+    "1": {
+        "en": {
+            "title": "AI Breakthrough in Medical Diagnosis",
+            "content": "Researchers have developed an AI system that can detect early signs of diseases with 95% accuracy. The system analyzes medical images and patient data to identify patterns invisible to the human eye.",
+            "takeaway": "AI could revolutionize early disease detection.",
+            "source": "Journal of Medical AI Research, Vol. 12, Issue 4"
+        },
+        "ar": {
+            "title": "طفرة في الذكاء الاصطناعي لتشخيص الأمراض",
+            "content": "طور الباحثون نظام ذكاء اصطناعي يمكنه اكتشاف العلامات المبكرة للأمراض بدقة 95٪. يحلل النظام الصور الطبية وبيانات المرضى لتحديد الأنماط غير المرئية للعين البشرية.",
+            "takeaway": "يمكن للذكاء الاصطناعي أن يحدث ثورة في الكشف المبكر عن الأمراض.",
+            "source": "مجلة أبحاث الذكاء الاصطناعي الطبي، المجلد 12، العدد 4"
+        },
+        "ur": {
+            "title": "طبی تشخیص میں مصنوعی ذہانت کی پیشرفت",
+            "content": "محققین نے ایک ایسا AI سسٹم تیار کیا ہے جو 95 فیصد درستگی کے ساتھ بیماریوں کی ابتدائی علامات کا پتہ لگا سکتا ہے۔ یہ نظام طبی تصاویر اور مریضوں کے ڈیٹا کا تجزیہ کرتا ہے تاکہ انسانی آنکھ سے اوجھل پیٹرنز کی نشاندہی کی جا سکے۔",
+            "takeaway": "AI ابتدائی بیماری کی تشخیص میں انقلاب لا سکتا ہے۔",
+            "source": "جرنل آف میڈیکل AI ریسرچ، جلد 12، شمارہ 4"
+        }
+    },
+    "2": {
+        "en": {
+            "title": "Global Summit on Climate Change",
+            "content": "World leaders gathered in Dubai for the annual climate summit, discussing urgent measures to combat climate change.",
+            "takeaway": "Historic agreements reached on emissions reduction.",
+            "source": "United Nations Climate Conference 2023 official report"
+        },
+        "ar": {
+            "title": "القمة العالمية حول تغير المناخ",
+            "content": "اجتمع قادة العالم في دبي لحضور قمة المناخ السنوية، وناقشوا تدابير عاجلة لمكافحة تغير المناخ.",
+            "takeaway": "تم التوصل إلى اتفاقيات تاريخية بشأن خفض الانبعاثات.",
+            "source": "تقرير مؤتمر الأمم المتحدة للمناخ 2023 الرسمي"
+        },
+        "ur": {
+            "title": "موسمیاتی تبدیلی پر عالمی سربراہی اجلاس",
+            "content": "اقوام عالم کے رہنماؤں نے سالانہ موسمیاتی سربراہی اجلاس کے لیے دبئی میں جمع ہوئے اور موسمیاتی تبدیلی سے نمٹنے کے لیے فوری اقدامات پر تبادلہ خیال کیا۔",
+            "takeaway": "اخراج میں کمی کے حوالے سے تاریخی معاہدے طے پائے۔",
+            "source": "اقوام متحدہ کے موسمیاتی کانفرنس 2023 کی سرکاری رپورٹ"
+        }
+    }
+}
