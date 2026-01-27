@@ -1,28 +1,28 @@
 {
-  "team": [
-    {
-      "id": 1,
-      "name": "UMMAH Step",
-      "role": "Senior Correspondent, Commentator, Editor & Founder",
-      "initials": "US",
-      "bio": "Journalist and commentator, with extensive experience issues in MENA Region.",
-      "social": {
-        "instagram": "#",
-        "tiktok": "#",
-        "upscrolled": "#"
-      }
-    },
-    {
-      "id": 2,
-      "name": "Rizky Al Indunisi",
-      "role": "International Correspondent, Digital Specialist & Co-Founder",
-      "initials": "R",
-      "bio": "International Correspondent and Journalist and also Digital Specialist of UMMH Press.",
-      "social": {
-        "instagram": "#",
-        "tiktok": "#",
-        "upscrolled": "#"
-      }
-    }
-  ]
+    "team": [
+        {
+            "id": 1,
+            "name": "Ummah Step",
+            "role": "Senior Editor & Founder",
+            "image": "https://via.placeholder.com/300x300/FF6600/FFFFFF?text=Ummah+Step",
+            "bio": "Award-winning journalist with over 15 years of experience in investigative reporting and breaking news coverage.",
+            "social": {
+                "instagram": "#",
+                "tiktok": "#",
+                "upscrolled": "#"
+            }
+        },
+        {
+            "id": 2,
+            "name": "Rizky Al Indunisi",
+            "role": "Tech Correspondent & Co-Founder",
+            "image": "https://via.placeholder.com/300x300/FF6600/FFFFFF?text=Rizky+Al+Indunisi",
+            "bio": "Technology expert specializing in AI, cybersecurity, and emerging tech trends with 10+ years in tech journalism.",
+            "social": {
+                "instagram": "#",
+                "tiktok": "#",
+                "upscrolled": "#"
+            }
+        }
+    ]
 }
