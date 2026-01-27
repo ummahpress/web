@@ -100,41 +100,37 @@ const UIManager = {
     },
     
     // Render posts
-    async renderPosts(categorySlug = 'all') {
-        // Show loading spinner
-        if (this.elements.loadingSpinner) {
-            this.elements.loadingSpinner.style.display = 'flex';
-        }
-        
-        // Update active category
-        this.updateActiveCategory(categorySlug);
-        
-        // Get posts
-        const posts = await DataHandler.getPostsByCategory(categorySlug);
-        
-        // Hide loading spinner
-        if (this.elements.loadingSpinner) {
-            this.elements.loadingSpinner.style.display = 'none';
-        }
-        
-        // Clear posts container
-        this.elements.postsContainer.innerHTML = '';
-        
-        if (posts.length === 0) {
-            this.renderNoPostsMessage();
-            return;
-        }
-        
-        // Render each post
-        for (const post of posts) {
-            const author = await DataHandler.getAuthorById(post.authorId);
-            const postElement = this.createPostElement(post, author);
-            this.elements.postsContainer.appendChild(postElement);
-        }
-        
-        // Add event listeners to "Read More" buttons
-        this.setupReadMoreButtons();
-    },
+async renderPosts(categorySlug = 'all') {
+    // Clear posts container
+    this.elements.postsContainer.innerHTML = '';
+    
+    // Show temporary message
+    const tempMessage = document.createElement('div');
+    tempMessage.className = 'no-content-message';
+    tempMessage.innerHTML = '<p>Loading news articles...</p>';
+    this.elements.postsContainer.appendChild(tempMessage);
+    
+    // Get posts
+    const posts = await DataHandler.getPostsByCategory(categorySlug);
+    
+    // Clear container
+    this.elements.postsContainer.innerHTML = '';
+    
+    if (posts.length === 0) {
+        this.renderNoPostsMessage();
+        return;
+    }
+    
+    // Render each post
+    for (const post of posts) {
+        const author = await DataHandler.getAuthorById(post.authorId);
+        const postElement = this.createPostElement(post, author);
+        this.elements.postsContainer.appendChild(postElement);
+    }
+    
+    // Add event listeners to "Read More" buttons
+    this.setupReadMoreButtons();
+},
     
     // Create post element
     createPostElement(post, author) {
