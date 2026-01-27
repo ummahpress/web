@@ -8,105 +8,93 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002" 
-                         alt="Ummah Press Logo" 
-                         class="logo dark-logo">
-                    <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG" 
-                         alt="Ummah Press Logo" 
-                         class="logo light-logo">
-                </div>
-                <button class="sidebar-close" id="sidebarClose">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002" 
+                     alt="Ummah Press Logo" 
+                     class="logo">
             </div>
-            
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item active" data-page="home">
-                        <a href="#">
-                            <i class="fas fa-home"></i>
-                            <span class="nav-text">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" data-page="about">
-                        <a href="#">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="nav-text">About</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <div class="sidebar-footer">
-                <div class="theme-switch-container">
-                    <span class="theme-label">
-                        <i class="fas fa-sun"></i>
-                    </span>
-                    <label class="theme-switch">
-                        <input type="checkbox" id="themeToggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="theme-label">
-                        <i class="fas fa-moon"></i>
-                    </span>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-page="home">
+                    <a href="#home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-page="about">
+                    <a href="#about">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="theme-toggle">
+                <span>Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Header -->
+        <header class="top-header">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-content">
+                <h1>Ummah Press</h1>
+                <p class="tagline">Rapid News Reporting</p>
+            </div>
+            <div class="header-time" id="currentTime"></div>
+        </header>
+
+        <!-- Category Filters -->
+        <section class="category-section">
+            <div class="category-container">
+                <div class="category-scroll" id="categoryScroll">
+                    <!-- Categories will be loaded here -->
                 </div>
             </div>
-        </aside>
+        </section>
 
-        <!-- Main Content -->
-        <main class="main-content" id="mainContent">
-            <!-- Top Bar -->
-            <header class="top-bar">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="header-title">
-                    <h1 class="page-title">Ummah Press</h1>
-                    <div class="tagline">Rapid News Reporting</div>
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Home Page -->
+            <section class="page active" id="homePage">
+                <div class="news-feed" id="newsFeed">
+                    <!-- News posts will be loaded here -->
                 </div>
-                <div class="top-bar-actions">
-                    <div class="current-time" id="currentTime"></div>
-                </div>
-            </header>
+            </section>
 
-            <!-- Category Filters -->
-            <div class="category-filters" id="categoryFilters">
-                <div class="filters-container">
-                    <div class="filters-scroll" id="filtersScroll">
-                        <!-- Category filters will be dynamically loaded here -->
+            <!-- About Page -->
+            <section class="page" id="aboutPage">
+                <div class="about-section">
+                    <h2>Our Team</h2>
+                    <div class="team-grid" id="teamGrid">
+                        <!-- Team members will be loaded here -->
                     </div>
                 </div>
-            </div>
-
-            <!-- Page Content -->
-            <div class="page-content">
-                <!-- Home Page -->
-                <div class="page active" id="homePage">
-                    <div class="posts-container" id="postsContainer">
-                        <!-- Posts will be dynamically loaded here -->
-                    </div>
-                </div>
-
-                <!-- About Page -->
-                <div class="page" id="aboutPage">
-                    <div class="about-container">
-                        <h2 class="about-title">Our Team</h2>
-                        <div class="team-members">
-                            <!-- Team members will be dynamically loaded here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+            </section>
+        </div>
+    </main>
 
     <!-- Scripts -->
     <script src="assets/js/data.js"></script>
