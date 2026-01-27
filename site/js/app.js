@@ -21,31 +21,124 @@ const currentUserName = document.getElementById('currentUserName');
 const currentUserAvatar = document.getElementById('currentUserAvatar');
 
 // Data - Defined inline for simplicity (you can replace with JSON loading)
+// Updated posts array with takeaway and media
+const posts = [
+    {
+        id: 1,
+        authorId: 1,
+        date: "2023-06-15",
+        categories: ["World News", "Politics"],
+        title: "Global Climate Summit 2023",
+        content: "Global leaders gather for emergency summit on climate change. The conference, held in Dubai, brings together representatives from over 190 countries to discuss urgent measures to combat the escalating climate crisis. Key topics include carbon emission reduction targets, renewable energy investments, and climate adaptation funding for vulnerable nations.",
+        excerpt: "Global leaders gather for emergency summit on climate change...",
+        source: "United Nations Climate Change Conference (COP28) official statements and press releases.",
+        takeaway: "The summit marks a crucial turning point in global climate policy, with unprecedented commitments from major economies.",
+        media: {
+            type: "image",
+            url: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            caption: "World leaders at the climate summit in Dubai",
+            credit: "Photo by United Nations"
+        },
+        featured: true
+    },
+    {
+        id: 2,
+        authorId: 2,
+        date: "2023-06-12",
+        categories: ["Technology", "Business"],
+        title: "Quantum Computing Breakthrough",
+        content: "New breakthrough in quantum computing announced by researchers at leading tech institute. The development could revolutionize data processing and cryptography. The quantum processor demonstrated the ability to solve complex problems in minutes that would take traditional supercomputers thousands of years. This advancement has significant implications for fields ranging from medicine to artificial intelligence.",
+        excerpt: "New breakthrough in quantum computing announced by researchers...",
+        source: "Nature Journal, Volume 618, Issue 7965, pp. 467-471 (2023)",
+        takeaway: "Quantum computing has reached a milestone where practical applications in medicine and cryptography are now within reach.",
+        media: {
+            type: "image",
+            url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+            caption: "Quantum processor chip",
+            credit: "Photo by IBM Research"
+        },
+        featured: true
+    },
+    {
+        id: 3,
+        authorId: 3,
+        date: "2023-06-10",
+        categories: ["Health", "Science"],
+        title: "Intermittent Fasting Study",
+        content: "Major study reveals significant benefits of intermittent fasting for metabolic health. The research, published in the New England Journal of Medicine, followed participants for over a year and found improved insulin sensitivity, reduced inflammation markers, and better cardiovascular health among those practicing time-restricted eating. However, experts caution that the approach may not be suitable for everyone, especially those with certain medical conditions.",
+        excerpt: "Major study reveals significant benefits of intermittent fasting...",
+        source: "New England Journal of Medicine, Vol. 388, No. 23, June 8, 2023",
+        takeaway: "Time-restricted eating shows promising results for metabolic health but requires medical supervision for certain individuals.",
+        media: {
+            type: "video",
+            url: "https://www.youtube.com/embed/example123",
+            thumbnail: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            caption: "Dr. Sarah Johnson explains the study findings",
+            credit: "NEJM Video Brief"
+        },
+        featured: false
+    },
+    {
+        id: 4,
+        authorId: 1,
+        date: "2023-06-08",
+        categories: ["Education", "Religion"],
+        title: "Islamic Education Initiative",
+        content: "New initiative launched to integrate Islamic studies with modern education curriculum. The program, developed by scholars and educators, aims to provide a holistic educational approach that combines traditional Islamic knowledge with contemporary academic disciplines. Pilot programs are set to begin in several countries next academic year, with plans for expansion based on initial results and feedback from participating communities.",
+        excerpt: "New initiative launched to integrate Islamic studies with modern education...",
+        source: "International Islamic Education Council annual report and press conference statements.",
+        takeaway: "This program could bridge the gap between traditional Islamic education and modern academic requirements.",
+        media: {
+            type: "image",
+            url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            caption: "Students in a modern Islamic classroom",
+            credit: "Photo by Education Initiative"
+        },
+        featured: true
+    },
+    {
+        id: 5,
+        authorId: 2,
+        date: "2023-06-05",
+        categories: ["Sports", "Entertainment"],
+        title: "Historic Sports Victory",
+        content: "Historic victory for national team in international championship finals. The underdog team's remarkable performance has captivated the nation, with millions tuning in to watch the final match. The coach's innovative strategy and the players' exceptional teamwork were credited for the unexpected win. Celebrations erupted across the country following the victory, with fans praising the team's dedication and perseverance throughout the tournament.",
+        excerpt: "Historic victory for national team in international championship finals...",
+        source: "International Sports Federation official match report and post-game interviews.",
+        takeaway: "The victory demonstrates the importance of innovative coaching and team unity in achieving unexpected success.",
+        media: {
+            type: "video",
+            url: "https://www.youtube.com/embed/example456",
+            thumbnail: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            caption: "Championship final highlights",
+            credit: "Sports Network"
+        },
+        featured: false
+    }
+];
+
+// Authors array
 const authors = [
     {
         id: 1,
         name: "Ummah Press",
         role: "Editorial Team",
-        avatar: "assets/images/avatar.png",
-        bio: "The official Ummah Press editorial team dedicated to delivering accurate and timely news to the Muslim community worldwide.",
-        social: {
-            upscrolled: "#",
-            instagram: "#"
-        }
+        avatar: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
+        bio: "The official Ummah Press editorial team dedicated to delivering accurate and timely news to the Muslim community worldwide."
     },
     {
         id: 2,
         name: "Ummah Step",
         role: "Founder & Editor-in-Chief",
-        avatar: "assets/images/avatar.png",
-        bio: "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media. His passion for delivering accurate and timely news to the Muslim community drives the mission of Ummah Press."
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+        bio: "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media."
     },
     {
         id: 3,
         name: "Rizky Al indunisi",
         role: "Chief Reporter",
-        avatar: "assets/images/avatar.png",
-        bio: "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events. His dedication to truthful reporting and deep understanding of global affairs makes him an invaluable asset to our team."
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+        bio: "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events."
     }
 ];
 
@@ -54,48 +147,7 @@ const categories = [
     "Business", "Sports", "Entertainment", "Science", "Religion"
 ];
 
-const posts = [
-    {
-        id: 1,
-        authorId: 1,
-        date: "2023-06-15",
-        categories: ["World News", "Politics"],
-        content: "Global leaders gather for emergency summit on climate change. The conference, held in Dubai, brings together representatives from over 190 countries to discuss urgent measures to combat the escalating climate crisis. Key topics include carbon emission reduction targets, renewable energy investments, and climate adaptation funding for vulnerable nations.",
-        source: "United Nations Climate Change Conference (COP28) official statements and press releases."
-    },
-    {
-        id: 2,
-        authorId: 2,
-        date: "2023-06-12",
-        categories: ["Technology", "Business"],
-        content: "New breakthrough in quantum computing announced by researchers at leading tech institute. The development could revolutionize data processing and cryptography. The quantum processor demonstrated the ability to solve complex problems in minutes that would take traditional supercomputers thousands of years. This advancement has significant implications for fields ranging from medicine to artificial intelligence.",
-        source: "Nature Journal, Volume 618, Issue 7965, pp. 467-471 (2023)"
-    },
-    {
-        id: 3,
-        authorId: 3,
-        date: "2023-06-10",
-        categories: ["Health", "Science"],
-        content: "Major study reveals significant benefits of intermittent fasting for metabolic health. The research, published in the New England Journal of Medicine, followed participants for over a year and found improved insulin sensitivity, reduced inflammation markers, and better cardiovascular health among those practicing time-restricted eating. However, experts caution that the approach may not be suitable for everyone, especially those with certain medical conditions.",
-        source: "New England Journal of Medicine, Vol. 388, No. 23, June 8, 2023"
-    },
-    {
-        id: 4,
-        authorId: 1,
-        date: "2023-06-08",
-        categories: ["Education", "Religion"],
-        content: "New initiative launched to integrate Islamic studies with modern education curriculum. The program, developed by scholars and educators, aims to provide a holistic educational approach that combines traditional Islamic knowledge with contemporary academic disciplines. Pilot programs are set to begin in several countries next academic year, with plans for expansion based on initial results and feedback from participating communities.",
-        source: "International Islamic Education Council annual report and press conference statements."
-    },
-    {
-        id: 5,
-        authorId: 2,
-        date: "2023-06-05",
-        categories: ["Sports", "Entertainment"],
-        content: "Historic victory for national team in international championship finals. The underdog team's remarkable performance has captivated the nation, with millions tuning in to watch the final match. The coach's innovative strategy and the players' exceptional teamwork were credited for the unexpected win. Celebrations erupted across the country following the victory, with fans praising the team's dedication and perseverance throughout the tournament.",
-        source: "International Sports Federation official match report and post-game interviews."
-    }
-];
+
 
 // Helper Functions
 function formatDate(dateString) {
