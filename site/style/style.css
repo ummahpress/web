@@ -369,7 +369,7 @@ body {
 
 /* Post Card */
 .post-card {
-    background-color: var(--card-bg);
+    background: linear-gradient(#15202b, rgba(255, 152, 0, 0.05));
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 20px;
