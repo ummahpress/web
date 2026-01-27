@@ -19,7 +19,7 @@
     --text-secondary-dark: #8899a6;
     --border-dark: #38444d;
     --accent-dark: #ff9800;
-    --card-bg-dark: #192734;
+    ---bg-dark: #192734;
     --hover-dark: #1c2732;
     
     /* Common variables */
@@ -384,7 +384,7 @@ body {
 }
 
 .post-card.featured {
-    border: 2px solid var(--accent);
+    border: 2px solid #787878;
     background: linear-gradient(to bottom, var(--card-bg), rgba(255, 152, 0, 0.05));
 }
 
