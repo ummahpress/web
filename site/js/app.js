@@ -174,33 +174,12 @@ function renderPosts(categorySlug = 'all') {
     });
     
     setupReadMoreButtons();
+    setupMediaButtons();
 }
 
 function createPostElement(post, author) {
     const postElement = document.createElement('div');
     postElement.className = `post-card ${post.featured ? 'featured' : ''}`;
-    
-    let mediaHTML = '';
-    if (post.media) {
-        const thumbnail = post.media.thumbnail || post.media.url;
-        const mediaIcon = post.media.type === 'video' ? '▶️' : '🖼️';
-        
-        mediaHTML = `
-            <div class="post-media-link" data-media-id="${post.id}">
-                <div class="media-thumbnail-container">
-                    <img src="${thumbnail}" alt="${post.media.caption}" class="media-thumbnail">
-                    ${post.media.type === 'video' ? '<div class="video-play-icon"><i class="fas fa-play"></i></div>' : ''}
-                </div>
-                <button class="view-media-btn">
-                    <i class="fas fa-external-link-alt"></i> View Media
-                </button>
-                <div class="media-info">
-                    <span class="media-type">${mediaIcon} ${post.media.type.toUpperCase()}</span>
-                    <span class="media-caption-preview">${post.media.caption}</span>
-                </div>
-            </div>
-        `;
-    }
     
     postElement.innerHTML = `
         <div class="post-header">
@@ -230,20 +209,23 @@ function createPostElement(post, author) {
         </div>
         ` : ''}
         
-        ${mediaHTML}
-        
         <div class="post-source">
             <div class="source-label">Source:</div>
             <div class="source-text">${post.source}</div>
         </div>
         
-        <button class="read-more-btn" data-post-id="${post.id}">Read More</button>
+        <div class="post-actions">
+            <button class="read-more-btn" data-post-id="${post.id}">
+                <i class="fas fa-book-reader"></i> Read More
+            </button>
+            
+            ${post.media ? `
+            <button class="view-media-btn" data-media-id="${post.id}">
+                <i class="fas fa-photo-video"></i> View Media
+            </button>
+            ` : ''}
+        </div>
     `;
-    
-    if (post.media) {
-        const mediaLink = postElement.querySelector('.post-media-link');
-        mediaLink.addEventListener('click', () => openMediaModal(post.media));
-    }
     
     return postElement;
 }
@@ -254,17 +236,29 @@ function setupReadMoreButtons() {
     });
 }
 
+function setupMediaButtons() {
+    document.querySelectorAll('.view-media-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.mediaId;
+            const post = posts.find(p => p.id == postId);
+            if (post && post.media) {
+                openMediaModal(post.media);
+            }
+        });
+    });
+}
+
 function toggleReadMore(e) {
-    const postId = e.target.dataset.postId;
+    const postId = e.target.dataset.postId || e.target.closest('.read-more-btn').dataset.postId;
     const contentElement = document.getElementById(`post-content-${postId}`);
-    const btn = e.target;
+    const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('.read-more-btn');
     
     if (contentElement.classList.contains('short')) {
         contentElement.classList.remove('short');
-        btn.textContent = 'Read Less';
+        btn.innerHTML = '<i class="fas fa-book"></i> Read Less';
     } else {
         contentElement.classList.add('short');
-        btn.textContent = 'Read More';
+        btn.innerHTML = '<i class="fas fa-book-reader"></i> Read More';
     }
 }
 
