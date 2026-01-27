@@ -1,10 +1,50 @@
-// UI Manager
 const UIManager = {
-    init(siteData) {
+    data: null,
+    currentCategory: 'all',
+
+    async init() {
+        this.data = await DataManager.getAllData();
+        this.setupTheme();
         this.setupEventListeners();
-        this.updateSiteSettings(siteData.settings);
-        this.renderCategoryTabs(siteData.settings.categories);
-        this.renderTeamMembers(siteData.users);
+        this.renderCategoryTabs();
+        this.renderPosts();
+        this.renderAboutPage();
+        this.updateLogos();
+    },
+
+    setupTheme() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('ummah-theme') || 'dark';
+        
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('ummah-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            this.updateLogos();
+        });
+    },
+
+    updateLogos() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        const logoDark = "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002";
+        const logoLight = "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG";
+        
+        const headerLogo = document.querySelector('.header-logo');
+        const sidebarLogo = document.getElementById('sidebar-logo');
+        
+        if (theme === 'dark') {
+            headerLogo.src = logoDark;
+            sidebarLogo.src = logoDark;
+        } else {
+            headerLogo.src = logoLight;
+            sidebarLogo.src = logoLight;
+        }
     },
 
     setupEventListeners() {
@@ -16,40 +56,33 @@ const UIManager = {
         // Navigation
         document.getElementById('home-link').addEventListener('click', (e) => {
             e.preventDefault();
-            this.switchPage('home');
+            this.showPage('home');
         });
         
         document.getElementById('about-link').addEventListener('click', (e) => {
             e.preventDefault();
-            this.switchPage('about');
+            this.showPage('about');
         });
 
-        // Floating refresh button
+        // Refresh button
         document.getElementById('floating-refresh-btn').addEventListener('click', () => {
-            window.location.reload();
+            this.animateRefreshButton();
+            setTimeout(() => this.renderPosts(), 500);
         });
+
+        // New update indicator
+        document.getElementById('new-update-indicator').addEventListener('click', () => {
+            this.simulateNewUpdate();
+        });
+
+        // Window resize
+        window.addEventListener('resize', () => this.handleResize());
     },
 
-    updateSiteSettings(settings) {
-        document.getElementById('site-title').textContent = settings.site.title;
-        document.getElementById('site-tagline').textContent = settings.site.description;
-        document.title = `${settings.site.title} - ${settings.site.tagline}`;
-        
-        // Update logo if available
-        const logoImg = document.getElementById('logo-image');
-        if (logoImg && settings.site.logo) {
-            logoImg.src = settings.site.logo;
-        }
-
-        // Update CSS variables for colors
-        document.documentElement.style.setProperty('--primary', settings.site.primaryColor);
-        document.documentElement.style.setProperty('--accent', settings.site.primaryColor);
-    },
-
-    renderCategoryTabs(categories) {
+    renderCategoryTabs() {
         const container = document.getElementById('category-tabs');
-        if (!container) return;
-
+        const categories = this.data.settings.categories;
+        
         container.innerHTML = categories.map(cat => `
             <button class="category-tab ${cat.id === 'all' ? 'active' : ''}" 
                     data-category="${cat.id}">
@@ -57,90 +90,161 @@ const UIManager = {
             </button>
         `).join('');
 
-        // Add click handlers
         container.querySelectorAll('.category-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                // Update active tab
                 container.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
                 e.target.classList.add('active');
-                
-                // Filter posts by category
-                const category = e.target.dataset.category;
-                App.filterPostsByCategory(category);
+                this.currentCategory = e.target.dataset.category;
+                this.renderPosts();
             });
         });
     },
 
-    renderTeamMembers(users) {
-        const aboutPage = document.getElementById('about-page');
-        if (!aboutPage) return;
-
-        const teamHTML = users.map(user => `
-            <div class="team-card">
-                <div class="team-avatar">${user.initials}</div>
-                <div class="team-info">
-                    <h3 class="team-name">${user.name}</h3>
-                    <div class="team-role">${user.role}</div>
-                    <p class="team-bio">${user.bio}</p>
-                    <div class="team-social">
-                        ${user.social.instagram ? `<a href="${user.social.instagram}" class="social-link instagram"><i class="fab fa-instagram"></i></a>` : ''}
-                        ${user.social.tiktok ? `<a href="${user.social.tiktok}" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>` : ''}
-                        ${user.social.upscrolled ? `<a href="${user.social.upscrolled}" class="social-link upscrolled"><i class="fas fa-arrow-up"></i></a>` : ''}
+    renderPosts() {
+        const container = document.getElementById('news-updates-container');
+        let posts = this.data.posts.posts;
+        
+        if (this.currentCategory !== 'all') {
+            posts = posts.filter(post => 
+                post.categories && post.categories.includes(this.currentCategory)
+            );
+        }
+        
+        document.getElementById('update-count').textContent = posts.length;
+        
+        container.innerHTML = posts.map(post => {
+            const isLong = post.content.length > 200;
+            const shortContent = isLong ? post.content.substring(0, 200) + '...' : post.content;
+            const isBreaking = post.breaking || (post.categories && post.categories.includes('breaking'));
+            
+            return `
+                <div class="news-update ${isBreaking ? 'breaking-news' : ''}">
+                    ${isBreaking ? '<div class="breaking-label">BREAKING</div>' : ''}
+                    <div class="update-header">
+                        <div class="update-icon">
+                            <i class="${post.icon || 'fas fa-newspaper'}"></i>
+                        </div>
+                        <div class="update-info">
+                            <h3>${post.title}</h3>
+                            <div class="update-meta">
+                                <div class="update-time"><i class="far fa-clock"></i> ${post.time}</div>
+                                <div class="update-author"><i class="fas fa-user-edit"></i> by ${post.author}</div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="update-content ${isLong ? 'truncated' : ''}" data-full="${post.content}">
+                        ${isLong ? shortContent : post.content}
+                    </div>
+                    ${isLong ? `
+                        <button class="read-more-btn" onclick="UIManager.toggleReadMore(this)">
+                            <span>Read more</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    ` : ''}
+                    ${post.categories && post.categories.length > 0 ? `
+                        <div class="update-categories">
+                            ${post.categories.map(cat => `
+                                <span class="category-badge">${cat}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    ${post.tags && post.tags.length > 0 ? `
+                        <div class="update-tags">
+                            ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
+    },
 
+    toggleReadMore(button) {
+        const content = button.previousElementSibling;
+        const isTruncated = content.classList.contains('truncated');
+        
+        if (isTruncated) {
+            content.textContent = content.dataset.full;
+            content.classList.remove('truncated');
+            button.innerHTML = '<span>Read less</span> <i class="fas fa-chevron-up"></i>';
+            button.classList.add('active');
+        } else {
+            content.textContent = content.dataset.full.substring(0, 200) + '...';
+            content.classList.add('truncated');
+            button.innerHTML = '<span>Read more</span> <i class="fas fa-chevron-down"></i>';
+            button.classList.remove('active');
+        }
+    },
+
+    renderAboutPage() {
+        const aboutPage = document.getElementById('about-page');
+        const team = this.data.users.team;
+        
         aboutPage.innerHTML = `
-            <h2 class="page-title"><i class="fas fa-info-circle"></i> About UMMAH Press</h2>
+            <h2 class="page-title"><i class="fas fa-info-circle"></i> About UMMAH Network</h2>
             <div class="about-content">
-                <p>Welcome to <strong>UMMAH Press</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
+                <p>Welcome to <strong>UMMAH Network</strong>, your premier source for rapid news updates delivering real-time information as it happens.</p>
                 <p>Our mission is to ensure you're always informed with the latest developments across all major categories.</p>
-                <div class="features">
-                    <h3><i class="fas fa-star"></i> What makes us different:</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> <strong>Rapid Updates:</strong> News delivered in real-time</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Verified Sources:</strong> All news verified by our editorial team</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Author Attribution:</strong> Every update includes the journalist</li>
-                    </ul>
-                </div>
             </div>
             <div class="team-section">
                 <h3><i class="fas fa-users"></i> Our Team</h3>
-                <div class="team-grid">${teamHTML}</div>
+                <div class="team-grid">
+                    ${team.map(member => `
+                        <div class="team-card">
+                            <img src="${member.image}" alt="${member.name}" class="team-avatar">
+                            <h3 class="team-name">${member.name}</h3>
+                            <div class="team-role">${member.role}</div>
+                            <p class="team-bio">${member.bio}</p>
+                            <div class="team-social">
+                                ${member.social.instagram ? `<a href="${member.social.instagram}" class="social-link instagram"><i class="fab fa-instagram"></i></a>` : ''}
+                                ${member.social.tiktok ? `<a href="${member.social.tiktok}" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>` : ''}
+                                ${member.social.upscrolled ? `<a href="${member.social.upscrolled}" class="social-link upscrolled"><i class="fas fa-arrow-up"></i></a>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `;
     },
 
-    renderPosts(posts) {
-        const container = document.getElementById('news-updates-container');
-        if (!container) return;
+    animateRefreshButton() {
+        const btn = document.getElementById('floating-refresh-btn');
+        btn.style.transform = 'rotate(180deg)';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        setTimeout(() => {
+            btn.style.transform = '';
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+            }, 1000);
+        }, 500);
+    },
 
-        document.getElementById('update-count').textContent = posts.length;
-
-        container.innerHTML = posts.map(post => `
-            <div class="news-update ${post.breaking ? 'breaking-news' : ''}">
-                ${post.breaking ? '<div class="breaking-label">BREAKING</div>' : ''}
-                <div class="update-header">
-                    <div class="update-icon">
-                        <i class="${post.icon || 'fas fa-newspaper'}"></i>
-                    </div>
-                    <div class="update-info">
-                        <h3>${post.title}</h3>
-                        <div class="update-meta">
-                            <div class="update-date"><i class="far fa-calendar"></i> ${post.date}</div>
-                            <div class="update-author"><i class="fas fa-user-edit"></i> by ${post.author} | UMMAH Press</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="update-content">${post.content}</div>
-                ${post.tags && post.tags.length > 0 ? `
-                    <div class="update-tags">
-                        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
-                    </div>
-                ` : ''}
-            </div>
-        `).join('');
+    simulateNewUpdate() {
+        const newPost = {
+            id: this.data.posts.posts.length + 1,
+            title: "Live Update: Breaking News Alert",
+            content: "New developments are emerging as the situation continues to evolve. We're tracking this story closely and will provide updates as more information becomes available. Additional details are coming in from multiple sources on the ground. Stay tuned for further developments in this ongoing story.",
+            time: "Just now",
+            categories: ["breaking"],
+            icon: "fas fa-bullhorn",
+            author: "UMMAH News Desk",
+            tags: ["Live", "Update", "Breaking"]
+        };
+        
+        this.data.posts.posts.unshift(newPost);
+        this.renderPosts();
+        
+        const indicator = document.getElementById('new-update-indicator');
+        indicator.style.background = 'linear-gradient(90deg, var(--success), #00AA55)';
+        indicator.innerHTML = '<i class="fas fa-check"></i> New update loaded!';
+        
+        setTimeout(() => {
+            indicator.style.background = '';
+            indicator.innerHTML = '<i class="fas fa-bell"></i> New updates available. Click to load.';
+            indicator.style.display = 'none';
+        }, 2000);
     },
 
     toggleMobileMenu() {
@@ -155,18 +259,26 @@ const UIManager = {
         document.body.style.overflow = '';
     },
 
-    switchPage(page) {
-        document.getElementById('home-page').style.display = page === 'home' ? 'flex' : 'none';
-        document.getElementById('about-page').style.display = page === 'about' ? 'block' : 'none';
+    handleResize() {
+        if (window.innerWidth > 768) {
+            this.closeMobileMenu();
+        }
+    },
+
+    showPage(page) {
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('about-page').style.display = 'none';
         
-        // Update active nav
         document.querySelectorAll('.nav-item a').forEach(link => link.classList.remove('active'));
+        
         if (page === 'home') {
+            document.getElementById('home-page').style.display = 'flex';
             document.getElementById('home-link').classList.add('active');
-        } else {
+        } else if (page === 'about') {
+            document.getElementById('about-page').style.display = 'block';
             document.getElementById('about-link').classList.add('active');
         }
-
+        
         this.closeMobileMenu();
     }
 };
