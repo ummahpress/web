@@ -10,21 +10,18 @@ class UmmahPressApp {
         try {
             console.log('Initializing Ummah Press App...');
             
-            // Initialize Google Translate
-            GoogleTranslateManager.init();
-            
-            // Initialize Data Handler
-            await DataHandler.init();
-            
-            // Initialize UI Manager
+            // Initialize UI Manager first (immediate visual setup)
             UIManager.init();
             
             // Set initial theme from localStorage or default
             const savedTheme = localStorage.getItem('ummahpress-theme') || 'dark';
             UIManager.setTheme(savedTheme);
             
-            // Load all content
-            await UIManager.loadAllContent();
+            // Initialize Google Translate (async, doesn't block)
+            GoogleTranslateManager.init();
+            
+            // Load all content synchronously to avoid loading states
+            await this.loadAllContent();
             
             // Set initial page
             UIManager.setCurrentPage('home');
@@ -35,6 +32,25 @@ class UmmahPressApp {
         } catch (error) {
             console.error('Failed to initialize app:', error);
             this.showError();
+        }
+    }
+    
+    // Load all content without showing loading states
+    async loadAllContent() {
+        try {
+            // Initialize data handler (loads JSON files)
+            await DataHandler.init();
+            
+            // Render categories and posts together
+            await Promise.all([
+                UIManager.renderCategories(),
+                UIManager.renderPosts(),
+                UIManager.renderTeamMembers()
+            ]);
+            
+        } catch (error) {
+            console.error('Error loading content:', error);
+            // Don't throw, just log - the app should still work with default data
         }
     }
     
