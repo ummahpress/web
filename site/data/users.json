@@ -1,28 +1,24 @@
-{
-    "team": [
-        {
-            "id": 1,
-            "name": "Ummah Step",
-            "role": "Senior Editor & Founder",
-            "image": "https://via.placeholder.com/300x300/FF6600/FFFFFF?text=Ummah+Step",
-            "bio": "Award-winning journalist with over 15 years of experience in investigative reporting and breaking news coverage.",
-            "social": {
-                "instagram": "#",
-                "tiktok": "#",
-                "upscrolled": "#"
-            }
-        },
-        {
-            "id": 2,
-            "name": "Rizky Al Indunisi",
-            "role": "Tech Correspondent & Co-Founder",
-            "image": "https://via.placeholder.com/300x300/FF6600/FFFFFF?text=Rizky+Al+Indunisi",
-            "bio": "Technology expert specializing in AI, cybersecurity, and emerging tech trends with 10+ years in tech journalism.",
-            "social": {
-                "instagram": "#",
-                "tiktok": "#",
-                "upscrolled": "#"
-            }
+[
+    {
+        "id": 1,
+        "name": "Ummah Step",
+        "title": "Founder & Editor-in-Chief",
+        "bio": "Experienced journalist with over 15 years in the field. Passionate about delivering accurate and timely news to the Muslim community worldwide. Specializes in Middle Eastern affairs and Islamic economics.",
+        "avatar": "https://ik.imagekit.io/ummahpress/team/ummah-step.jpg?updatedAt=1712345678901",
+        "social": {
+            "twitter": "@UmmahStep",
+            "email": "ummah.step@ummahpress.com"
         }
-    ]
-}
+    },
+    {
+        "id": 2,
+        "name": "Rizky Al Indunisi",
+        "title": "Senior Reporter & Content Strategist",
+        "bio": "Award-winning journalist with expertise in Southeast Asian affairs and technology reporting. Fluent in Arabic, English, and Indonesian. Committed to ethical journalism and community engagement.",
+        "avatar": "https://ik.imagekit.io/ummahpress/team/rizky-al-indunisi.jpg?updatedAt=1712345678902",
+        "social": {
+            "twitter": "@RizkyAlIndunisi",
+            "email": "rizky@ummahpress.com"
+        }
+    }
+]
