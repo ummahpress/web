@@ -1,35 +1,24 @@
-{
-    "posts": [
-        {
-            "id": 1,
-            "title": "Global Climate Summit Reaches Historic Agreement",
-            "content": "World leaders have finalized a landmark climate agreement after intensive negotiations. The deal includes binding commitments from all major economies to reduce carbon emissions by 45% by 2030. This agreement comes after months of difficult negotiations and represents a major breakthrough in international climate policy. Experts are calling this the most significant climate agreement since the Paris Accord. The implementation will begin next year with regular progress reviews every six months.",
-            "time": "5 min ago",
-            "categories": ["breaking", "politics", "environment"],
-            "icon": "fas fa-globe-americas",
-            "author": "Sarah Chen",
-            "tags": ["Climate", "Politics", "Global"],
-            "breaking": true
-        },
-        {
-            "id": 2,
-            "title": "Tech Giant Unveils Revolutionary AI Assistant",
-            "content": "A major technology company has announced a breakthrough AI assistant capable of understanding context and nuance with unprecedented accuracy. Early demonstrations show it can handle complex multi-step tasks that previously required human intervention. The new AI system uses advanced neural networks and natural language processing to understand user intent and provide relevant responses.",
-            "time": "22 min ago",
-            "categories": ["tech", "innovation", "business"],
-            "icon": "fas fa-robot",
-            "author": "Marcus Johnson",
-            "tags": ["AI", "Technology", "Innovation"]
-        },
-        {
-            "id": 3,
-            "title": "Stock Markets Surge to Record Highs",
-            "content": "Global markets have reached all-time highs following positive economic indicators and strong corporate earnings. The tech sector led gains with an average increase of 4.2% across major indices. Analysts attribute the surge to strong quarterly earnings reports and optimistic economic forecasts.",
-            "time": "35 min ago",
-            "categories": ["business", "finance"],
-            "icon": "fas fa-chart-line",
-            "author": "David Park",
-            "tags": ["Markets", "Economy", "Finance"]
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "author": "Ummah Step",
+        "authorAvatar": "https://ik.imagekit.io/ummahpress/team/ummah-step.jpg?updatedAt=1712345678901",
+        "date": "2024-01-15",
+        "title": "Historic Peace Agreement Reached in Regional Summit",
+        "excerpt": "In a landmark development that could reshape the geopolitical landscape of the Middle East, representatives from several nations have signed a comprehensive peace agreement following months of secret negotiations facilitated by international mediators.",
+        "fullContent": "<p>In a landmark development that could reshape the geopolitical landscape of the Middle East, representatives from several nations have signed a comprehensive peace agreement following months of secret negotiations facilitated by international mediators.</p><p>The agreement, signed today in Doha, Qatar, addresses longstanding territorial disputes, security arrangements, and economic cooperation between the participating nations.</p>",
+        "categories": ["Politics", "Diplomacy", "Middle East"],
+        "featured": true
+    },
+    {
+        "id": 2,
+        "author": "Rizky Al Indunisi",
+        "authorAvatar": "https://ik.imagekit.io/ummahpress/team/rizky-al-indunisi.jpg?updatedAt=1712345678902",
+        "date": "2024-01-14",
+        "title": "Breakthrough in Renewable Energy Technology Announced",
+        "excerpt": "Scientists at the International Renewable Energy Institute have announced a major breakthrough in solar panel efficiency that could revolutionize the clean energy sector.",
+        "fullContent": "<p>Scientists at the International Renewable Energy Institute have announced a major breakthrough in solar panel efficiency that could revolutionize the clean energy sector.</p><p>The new photovoltaic technology achieves a record 45% efficiency rate under standard testing conditions.</p>",
+        "categories": ["Technology", "Environment", "Science"],
+        "featured": true
+    }
+]
