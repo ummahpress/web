@@ -1,73 +1,49 @@
-// UI Controller
 class UIController {
     constructor() {
         this.currentTheme = localStorage.getItem('theme') || 'light';
-        this.sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        this.sidebarOpen = false;
         this.currentPage = 'home';
-        this.activeFilter = 'all';
+        this.activeFilter = 'All';
         this.expandedPosts = new Set();
-        this.isMobile = window.innerWidth <= 1024;
+        this.isMobile = window.innerWidth <= 1023;
     }
 
-    // Initialize UI
     init() {
         this.setupEventListeners();
         this.applyTheme();
         this.updateThemeSwitch();
-        this.updateSidebarState();
         this.updateTime();
         this.setupPageNavigation();
-        this.renderTeamMembers();
-        this.renderCategoryFilters();
+        this.renderCategories();
         this.renderPosts();
+        this.renderTeam();
         
-        // Update time every minute
         setInterval(() => this.updateTime(), 60000);
         
-        // Update mobile detection on resize
         window.addEventListener('resize', () => {
-            this.isMobile = window.innerWidth <= 1024;
-            this.updateSidebarState();
+            this.isMobile = window.innerWidth <= 1023;
         });
     }
 
-    // Setup event listeners
     setupEventListeners() {
-        // Theme toggle switch
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('change', () => this.toggleTheme());
-        }
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('change', () => this.toggleTheme());
         
         // Menu toggle
-        document.getElementById('menuToggle').addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleSidebar();
-        });
-        
-        // Sidebar close button
-        const sidebarClose = document.getElementById('sidebarClose');
-        if (sidebarClose) {
-            sidebarClose.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.closeSidebar();
-            });
-        }
+        document.getElementById('menuToggle').addEventListener('click', () => this.toggleSidebar());
+        document.getElementById('sidebarClose').addEventListener('click', () => this.closeSidebar());
         
         // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
                 const page = item.dataset.page;
                 this.switchPage(page);
-                if (this.isMobile) {
-                    this.closeSidebar();
-                }
+                if (this.isMobile) this.closeSidebar();
             });
         });
         
-        // Close sidebar when clicking outside on mobile
+        // Close sidebar on outside click
         document.addEventListener('click', (e) => {
             const sidebar = document.getElementById('sidebar');
             const menuToggle = document.getElementById('menuToggle');
@@ -79,21 +55,8 @@ class UIController {
                 this.closeSidebar();
             }
         });
-        
-        // Close sidebar with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeSidebar();
-            }
-        });
-        
-        // Update category filter scroll on resize
-        window.addEventListener('resize', () => {
-            this.updateCategoryFilterScroll();
-        });
     }
 
-    // Toggle theme
     toggleTheme() {
         this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         localStorage.setItem('theme', this.currentTheme);
@@ -101,98 +64,44 @@ class UIController {
         this.updateThemeSwitch();
     }
 
-    // Update theme switch position
     updateThemeSwitch() {
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.checked = this.currentTheme === 'dark';
-        }
+        document.getElementById('themeToggle').checked = this.currentTheme === 'dark';
     }
 
-    // Apply current theme
     applyTheme() {
         document.documentElement.setAttribute('data-theme', this.currentTheme);
     }
 
-    // Toggle sidebar
     toggleSidebar() {
-        if (this.isMobile) {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        } else {
-            this.sidebarCollapsed = !this.sidebarCollapsed;
-            localStorage.setItem('sidebarCollapsed', this.sidebarCollapsed);
-            this.updateSidebarState();
-        }
-    }
-
-    // Close sidebar (mobile only)
-    closeSidebar() {
-        if (this.isMobile) {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.remove('active');
-        }
-    }
-
-    // Update sidebar state
-    updateSidebarState() {
         const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        
-        if (this.isMobile) {
-            sidebar.classList.remove('collapsed');
-            sidebar.classList.remove('active');
-        } else {
-            if (this.sidebarCollapsed) {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('collapsed');
-            } else {
-                sidebar.classList.remove('collapsed');
-                mainContent.classList.remove('collapsed');
-            }
-        }
+        sidebar.classList.toggle('active');
+        this.sidebarOpen = !this.sidebarOpen;
     }
 
-    // Switch between pages
+    closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.remove('active');
+        this.sidebarOpen = false;
+    }
+
     switchPage(page) {
         if (this.currentPage === page) return;
         
-        // Update navigation
         document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
             if (item.dataset.page === page) {
                 item.classList.add('active');
-            } else {
-                item.classList.remove('active');
             }
         });
         
-        // Update page content
-        document.querySelectorAll('.page').forEach(pageElement => {
-            pageElement.classList.remove('active');
+        document.querySelectorAll('.page').forEach(pageEl => {
+            pageEl.classList.remove('active');
         });
         
         document.getElementById(`${page}Page`).classList.add('active');
-        
-        // Update page title
-        const pageTitle = document.querySelector('.page-title');
-        if (page === 'home') {
-            pageTitle.textContent = 'Ummah Press';
-            document.querySelector('.tagline').style.display = 'block';
-        } else if (page === 'about') {
-            pageTitle.textContent = 'About Our Team';
-            document.querySelector('.tagline').style.display = 'none';
-        }
-        
         this.currentPage = page;
     }
 
-    // Setup page navigation
-    setupPageNavigation() {
-        // Default to home page
-        this.switchPage('home');
-    }
-
-    // Update current time
     updateTime() {
         const now = new Date();
         const options = { 
@@ -203,52 +112,113 @@ class UIController {
             hour: '2-digit',
             minute: '2-digit'
         };
-        const timeString = now.toLocaleDateString('en-US', options);
-        document.getElementById('currentTime').textContent = timeString;
+        document.getElementById('currentTime').textContent = now.toLocaleDateString('en-US', options);
     }
 
-    // Update category filter scroll
-    updateCategoryFilterScroll() {
-        const filtersScroll = document.getElementById('filtersScroll');
-        if (!filtersScroll) return;
-        
-        // Just ensure it's scrollable
-        filtersScroll.style.overflowX = 'auto';
-    }
-
-    // Render category filters
-    renderCategoryFilters() {
-        const container = document.getElementById('filtersScroll');
+    renderCategories() {
+        const container = document.getElementById('categoryScroll');
         if (!container) return;
         
         const categories = window.siteData?.categories || [];
         
-        container.innerHTML = `
-            <button class="filter-btn ${this.activeFilter === 'all' ? 'active' : ''}" 
-                    data-filter="all" onclick="uiController.filterPosts('all')">
-                <i class="fas fa-newspaper"></i> All News
+        container.innerHTML = categories.map(category => `
+            <button class="category-btn ${this.activeFilter === category ? 'active' : ''}" 
+                    onclick="uiController.filterPosts('${category}')">
+                ${category}
             </button>
-            ${categories.map(category => `
-                <button class="filter-btn ${this.activeFilter === category ? 'active' : ''}" 
-                        data-filter="${category}" onclick="uiController.filterPosts('${category}')">
-                    <i class="fas fa-hashtag"></i> ${category}
-                </button>
-            `).join('')}
-        `;
-        
-        this.updateCategoryFilterScroll();
+        `).join('');
     }
 
-    // Filter posts by category
     filterPosts(category) {
         this.activeFilter = category;
-        this.renderCategoryFilters();
+        this.renderCategories();
         this.renderPosts();
     }
 
-    // Render team members
-    renderTeamMembers() {
-        const container = document.querySelector('.team-members');
+    renderPosts() {
+        const container = document.getElementById('newsFeed');
+        if (!container) return;
+        
+        let posts = window.siteData?.posts || [];
+        
+        if (this.activeFilter !== 'All') {
+            posts = posts.filter(post => 
+                post.categories.includes(this.activeFilter)
+            );
+        }
+        
+        if (posts.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No Posts Found</h3>
+                    <p>Try selecting a different category.</p>
+                    <button class="btn-gradient" onclick="uiController.filterPosts('All')">
+                        Show All Posts
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = posts.map(post => {
+            const isExpanded = this.expandedPosts.has(post.id);
+            const excerptClass = isExpanded ? '' : 'collapsed';
+            const buttonText = isExpanded ? 'Read less' : 'Read more';
+            const buttonIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
+            
+            return `
+                <article class="news-card" data-post-id="${post.id}">
+                    ${post.featured ? '<div class="featured-badge">Featured</div>' : ''}
+                    
+                    <div class="news-header">
+                        <img src="${post.authorAvatar}" 
+                             alt="${post.author}" 
+                             class="author-avatar"
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=000000&color=fff&size=48'">
+                        <div class="author-info">
+                            <h3>${post.author}</h3>
+                            <div class="post-date">
+                                <i class="far fa-calendar"></i>
+                                ${this.formatDate(post.date)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="news-content">
+                        <h2>${post.title}</h2>
+                        <div class="news-excerpt ${excerptClass}">
+                            ${isExpanded ? post.fullContent : post.excerpt}
+                        </div>
+                        <button class="read-more-btn" onclick="uiController.toggleReadMore(${post.id})">
+                            <i class="fas ${buttonIcon}"></i>
+                            ${buttonText}
+                        </button>
+                    </div>
+                    
+                    <div class="news-categories">
+                        ${post.categories.map(cat => `
+                            <span class="category-tag" onclick="uiController.filterPosts('${cat}')">
+                                ${cat}
+                            </span>
+                        `).join('')}
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    toggleReadMore(postId) {
+        if (this.expandedPosts.has(postId)) {
+            this.expandedPosts.delete(postId);
+        } else {
+            this.expandedPosts.add(postId);
+        }
+        this.renderPosts();
+    }
+
+    renderTeam() {
+        const container = document.getElementById('teamGrid');
         if (!container) return;
         
         const members = window.siteData?.team || [];
@@ -263,22 +233,13 @@ class UIController {
                 <p class="member-title">${member.title}</p>
                 <div class="member-bio">${member.bio}</div>
                 <div class="member-social">
-                    <a href="https://tiktok.com/${member.social.tiktok.replace('@', '')}" 
-                       target="_blank" 
-                       class="social-link"
-                       title="TikTok">
+                    <a href="#" class="social-icon" title="TikTok">
                         <i class="fab fa-tiktok"></i>
                     </a>
-                    <a href="https://instagram.com/${member.social.instagram.replace('@', '')}" 
-                       target="_blank" 
-                       class="social-link"
-                       title="Instagram">
+                    <a href="#" class="social-icon" title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="#" 
-                       class="social-link"
-                       title="Upscrolled"
-                       onclick="alert('Upscrolled profile: ${member.social.upscrolled}')">
+                    <a href="#" class="social-icon" title="Upscrolled">
                         <i class="fas fa-arrow-up"></i>
                     </a>
                 </div>
@@ -286,98 +247,10 @@ class UIController {
         `).join('');
     }
 
-    // Render posts with filtering
-    renderPosts() {
-        const container = document.getElementById('postsContainer');
-        if (!container) return;
-        
-        let posts = window.siteData?.posts || [];
-        
-        // Apply category filter
-        if (this.activeFilter !== 'all') {
-            posts = posts.filter(post => 
-                post.categories && post.categories.includes(this.activeFilter)
-            );
-        }
-        
-        if (posts.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-newspaper"></i>
-                    <h3>No Posts Found</h3>
-                    <p>No news articles match the selected category.</p>
-                    <button class="read-more-btn" onclick="uiController.filterPosts('all')">
-                        Show All Posts
-                    </button>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = posts.map(post => {
-            const isExpanded = this.expandedPosts.has(post.id);
-            const excerptClass = isExpanded ? 'expanded' : 'collapsed';
-            const buttonText = isExpanded ? 'Read less' : 'Read more';
-            const buttonIcon = isExpanded ? 'fa-chevron-up' : 'fa-chevron-down';
-            
-            return `
-                <article class="post-card" data-post-id="${post.id}">
-                    ${post.featured ? '<div class="featured-badge">Featured</div>' : ''}
-                    <div class="post-header">
-                        <img src="${post.authorAvatar}" 
-                             alt="${post.author}" 
-                             class="author-avatar"
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=000000&color=fff&size=50'">
-                        <div class="author-info">
-                            <div class="author-name">${post.author}</div>
-                            <div class="post-date">
-                                <i class="far fa-calendar"></i>
-                                ${this.formatDate(post.date)}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="post-content">
-                        <h2 class="post-title">${post.title}</h2>
-                        <div class="post-excerpt ${excerptClass}">
-                            ${isExpanded ? post.fullContent : post.excerpt}
-                        </div>
-                        <button class="read-more-btn" 
-                                onclick="uiController.toggleReadMore(${post.id})">
-                            <i class="fas ${buttonIcon}"></i>
-                            ${buttonText}
-                        </button>
-                    </div>
-                    
-                    <div class="post-categories">
-                        ${post.categories.map(cat => `
-                            <span class="category-tag ${this.activeFilter === cat ? 'active' : ''}" 
-                                  onclick="uiController.filterPosts('${cat}')">
-                                #${cat}
-                            </span>
-                        `).join('')}
-                    </div>
-                </article>
-            `;
-        }).join('');
-    }
-
-    // Toggle read more/less
-    toggleReadMore(postId) {
-        if (this.expandedPosts.has(postId)) {
-            this.expandedPosts.delete(postId);
-        } else {
-            this.expandedPosts.add(postId);
-        }
-        this.renderPosts();
-    }
-
-    // Format date
     formatDate(dateString) {
         const date = new Date(dateString);
         const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
         
         if (diffDays === 0) return 'Today';
         if (diffDays === 1) return 'Yesterday';
@@ -391,5 +264,4 @@ class UIController {
     }
 }
 
-// Initialize UI Controller
 const uiController = new UIController();
