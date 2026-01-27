@@ -8,6 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <!-- Preload JSON data for immediate access -->
+<link rel="preload" href="data/posts.json" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="data/categories.json" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="data/authors.json" as="fetch" crossorigin="anonymous">
+
+<!-- Inline critical data (optional for small datasets) -->
+<script>
+    // Inline critical data for immediate rendering
+    window.APP_DATA = window.APP_DATA || {};
+    window.APP_DATA.critical = {
+        // You can put a few critical posts/authors here
+        // to render immediately while the rest loads
+    };
+</script>
 </head>
 <body class="dark">
     <!-- Sidebar Overlay -->
