@@ -1,9 +1,6 @@
-// Ummah Press App - Complete JavaScript File
-// Clean start with two authors and no posts
+// Ummah Press App - Simplified Version
 
-// =============================================
 // DOM Elements
-// =============================================
 const body = document.body;
 const sidebar = document.getElementById('sidebar');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
@@ -20,58 +17,37 @@ const categoriesContainer = document.getElementById('categoriesContainer');
 const postsContainer = document.getElementById('postsContainer');
 const teamMembersContainer = document.getElementById('teamMembers');
 const currentYear = document.getElementById('currentYear');
-const currentUserName = document.getElementById('currentUserName');
-const currentUserAvatar = document.getElementById('currentUserAvatar');
 
-// =============================================
-// Data Arrays - CLEAN START
-// =============================================
+// Data variables
+let authors = [];
+let posts = [];
 
-// ONLY TWO AUTHORS
-const authors = [
-    {
-        id: 1,
-        name: "Ummah Step",
-        role: "Founder & Editor-in-Chief",
-        avatar: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
-        bio: "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media. His passion for delivering accurate and timely news to the Muslim community drives the mission of Ummah Press."
-    },
-    {
-        id: 2,
-        name: "Rizky Al indunisi",
-        role: "Chief Reporter",
-        avatar: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
-        bio: "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events. His dedication to truthful reporting and deep understanding of global affairs makes him an invaluable asset to our team."
-    }
-];
-
-// Categories (you can keep or modify these)
+// Categories (fixed list)
 const categories = [
     "World News", "Politics", "Technology", "Health", "Education", 
     "Business", "Sports", "Entertainment", "Science", "Religion"
 ];
 
-// EMPTY POSTS ARRAY - START FRESH
-const posts = [
-    {
-        id: 1,
-        authorId: 1,
-        date: "2023-11-15",
-        categories: ["Technology", "Business"],
-        title: "AI Breakthrough in Medical Diagnosis",
-        content: "Researchers have developed an AI system that can detect early signs of diseases with 95% accuracy. The system analyzes medical images and patient data to identify patterns invisible to the human eye.",
-        source: "Journal of Medical AI Research, Vol. 12, Issue 4",
-        takeaway: "AI could revolutionize early disease detection, potentially saving millions of lives through timely intervention.",
-        media: {
-            type: "image",
-            url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-            caption: "AI analyzing medical imagery",
-            credit: "Photo by Medical Research Institute",
-            thumbnail: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: true
+// =============================================
+// Load Data from JSON Files
+// =============================================
+
+async function loadData() {
+    try {
+        // Load authors
+        const authorsResponse = await fetch('data/authors.json');
+        authors = await authorsResponse.json();
+        
+        // Load posts
+        const postsResponse = await fetch('data/posts.json');
+        posts = await postsResponse.json();
+        
+        return true;
+    } catch (error) {
+        console.error('Error loading data:', error);
+        return false;
     }
-];
+}
 
 // =============================================
 // Modal/Overlay Functions
@@ -164,6 +140,16 @@ function getAuthorById(id) {
 function renderPosts(categorySlug = 'all') {
     postsContainer.innerHTML = '';
     
+    if (posts.length === 0) {
+        postsContainer.innerHTML = `
+            <div class="post-card" style="text-align: center;">
+                <h3>No posts yet</h3>
+                <p>Check back soon for news updates!</p>
+            </div>
+        `;
+        return;
+    }
+    
     // Sort posts by date (newest first)
     const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
     
@@ -174,11 +160,8 @@ function renderPosts(categorySlug = 'all') {
     if (filteredPosts.length === 0) {
         postsContainer.innerHTML = `
             <div class="post-card" style="text-align: center;">
-                <h3>No posts yet</h3>
-                <p>Check back soon for news updates!</p>
-                <div style="margin-top: 20px; color: var(--text-secondary);">
-                    <p><small>To add posts, edit the <code>js/app.js</code> file</small></p>
-                </div>
+                <h3>No posts found for this category</h3>
+                <p>Try selecting a different category</p>
             </div>
         `;
         return;
@@ -412,17 +395,21 @@ function closeSidebar() {
 // App Initialization
 // =============================================
 
-function initApp() {
+async function initApp() {
+    // Set current year
     currentYear.textContent = new Date().getFullYear();
     
+    // Load data from JSON files
+    await loadData();
+    
+    // Set theme
     const savedTheme = localStorage.getItem('ummahpress-theme') || 'dark';
     setTheme(savedTheme);
     
-    currentUserName.textContent = authors[0].name;
-    currentUserAvatar.src = authors[0].avatar;
-    
+    // Set active page
     setActivePage('home');
     
+    // Event listeners
     sidebarCloseBtn.addEventListener('click', closeSidebar);
     mobileMenuToggle.addEventListener('click', openSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
@@ -445,8 +432,5 @@ function initApp() {
     });
 }
 
-// =============================================
-// Start the App
-// =============================================
-
+// Start app
 document.addEventListener('DOMContentLoaded', initApp);
