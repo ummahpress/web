@@ -485,7 +485,7 @@ body {
     padding: 15px;
     background-color: var(--hover);
     border-radius: 10px;
-    border-left: 4px solid var(--accent);
+    border: 1px solid #575757;
 }
 
 .takeaway-label {
