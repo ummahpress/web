@@ -15,14 +15,16 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002" 
-                     alt="Ummah Press Logo" 
-                     class="logo dark-logo">
-                <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG" 
-                     alt="Ummah Press Logo" 
-                     class="logo light-logo">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
+                <div class="logo-container">
+                    <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png?updatedAt=1769422692002" 
+                         alt="Ummah Press Logo" 
+                         class="logo dark-logo">
+                    <img src="https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG" 
+                         alt="Ummah Press Logo" 
+                         class="logo light-logo">
+                </div>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
             
@@ -44,11 +46,17 @@
             </nav>
             
             <div class="sidebar-footer">
-                <div class="theme-toggle">
-                    <button id="themeToggle">
+                <div class="theme-switch-container">
+                    <span class="theme-label">
+                        <i class="fas fa-sun"></i>
+                    </span>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="theme-label">
                         <i class="fas fa-moon"></i>
-                        <span class="nav-text">Dark Mode</span>
-                    </button>
+                    </span>
                 </div>
             </div>
         </aside>
@@ -57,20 +65,38 @@
         <main class="main-content" id="mainContent">
             <!-- Top Bar -->
             <header class="top-bar">
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="page-title">Ummah Press</h1>
+                <div class="header-title">
+                    <h1 class="page-title">Ummah Press</h1>
+                    <div class="tagline">Rapid News Reporting</div>
+                </div>
                 <div class="top-bar-actions">
                     <div class="current-time" id="currentTime"></div>
                 </div>
             </header>
 
+            <!-- Category Filters -->
+            <div class="category-filters" id="categoryFilters">
+                <div class="filters-container">
+                    <div class="filters-scroll">
+                        <!-- Category filters will be dynamically loaded here -->
+                    </div>
+                    <button class="filter-nav filter-prev" id="filterPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="filter-nav filter-next" id="filterNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
             <!-- Page Content -->
             <div class="page-content">
                 <!-- Home Page -->
                 <div class="page active" id="homePage">
-                    <div class="posts-container">
+                    <div class="posts-container" id="postsContainer">
                         <!-- Posts will be dynamically loaded here -->
                     </div>
                 </div>
