@@ -3,36 +3,34 @@
         "id": 1,
         "authorId": 1,
         "date": "2023-11-20",
-        "categories": ["Category1", "Category2"],
-        "title": "Your News Title",
-        "content": "Your full news article here...",
-        "source": "Where you got the information",
-        "takeaway": "Main point or key insight",
+        "categories": ["Technology", "Business"],
+        "title": "AI Breakthrough in Medical Diagnosis",
+        "content": "Researchers have developed an AI system that can detect early signs of diseases with 95% accuracy. The system analyzes medical images and patient data to identify patterns invisible to the human eye.",
+        "source": "Journal of Medical AI Research, Vol. 12, Issue 4",
+        "takeaway": "AI could revolutionize early disease detection.",
         "media": {
             "type": "image",
-            "url": "https://link-to-full-image.jpg",
-            "caption": "Description of image",
-            "credit": "Photo by Photographer",
-            "thumbnail": "https://link-to-small-image.jpg"
+            "url": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "caption": "AI analyzing medical imagery",
+            "credit": "Photo by Medical Research Institute"
         },
         "featured": true
     },
     {
         "id": 2,
         "authorId": 2,
-        "date": "2023-11-19",
-        "categories": ["World News"],
-        "title": "Another News Title",
-        "content": "Another news article...",
-        "source": "Another source",
-        "takeaway": "Another key point",
+        "date": "2023-11-18",
+        "categories": ["World News", "Politics"],
+        "title": "Global Summit on Climate Change",
+        "content": "World leaders gathered in Dubai for the annual climate summit, discussing urgent measures to combat climate change.",
+        "source": "United Nations Climate Conference 2023 official report",
+        "takeaway": "Historic agreements reached on emissions reduction.",
         "media": {
             "type": "video",
-            "url": "https://www.youtube.com/embed/VIDEO_ID",
-            "caption": "Video description",
-            "credit": "YouTube Channel",
-            "thumbnail": "https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg"
+            "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            "caption": "Climate summit highlights",
+            "credit": "Al Jazeera English"
         },
-        "featured": false
+        "featured": true
     }
 ]
