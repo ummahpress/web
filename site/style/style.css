@@ -376,6 +376,8 @@ body {
     border: 1px solid var(--border);
     transition: transform var(--transition-speed), box-shadow var(--transition-speed);
     width: 100%;
+    position: relative;
+    padding-top: 55px; /* Added for translate button */
 }
 
 .post-card:hover {
@@ -386,6 +388,156 @@ body {
 .post-card.featured {
     border: 2px solid #787878;
     background: linear-gradient(to bottom, var(--card-bg), rgba(255, 152, 0, 0.05));
+}
+
+/* ============================================= */
+/* Translate Feature Styles */
+/* ============================================= */
+
+.translate-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.translate-btn:hover {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.language-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    overflow: hidden;
+    animation: popupFadeIn 0.2s ease;
+    z-index: 2000;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.language-popup-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-secondary);
+}
+
+.language-popup-header h4 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.popup-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.popup-close-btn:hover {
+    background: var(--hover);
+    color: var(--text-primary);
+}
+
+.language-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.language-option {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.language-option:last-child {
+    border-bottom: none;
+}
+
+.language-option:hover {
+    background: var(--hover);
+}
+
+.language-option.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+}
+
+/* ============================================= */
+/* RTL Language Support */
+/* ============================================= */
+
+[dir="rtl"] .post-card {
+    text-align: right;
+}
+
+[dir="rtl"] .post-header > div {
+    margin-left: 0;
+    margin-right: 15px;
+}
+
+[dir="rtl"] .translate-btn {
+    right: auto;
+    left: 15px;
+}
+
+[dir="rtl"] .language-popup {
+    text-align: right;
+}
+
+[dir="rtl"] .post-categories {
+    justify-content: flex-end;
+}
+
+[dir="rtl"] .post-takeaway {
+    text-align: right;
+}
+
+[dir="rtl"] .post-source {
+    text-align: right;
+    border-left: none;
+    border-right: 4px solid var(--accent);
 }
 
 /* Post Header */
@@ -457,26 +609,29 @@ body {
     color: var(--accent);
 }
 
-/* Post Content */
+/* Post Content with Auto-Hide Read More */
 .post-content {
     line-height: 1.6;
     margin-bottom: 15px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 }
 
 .post-content.short {
-    max-height: 120px;
-    overflow: hidden;
-    position: relative;
+    max-height: calc(1.6em * 4); /* 4 lines */
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
+/* Remove the existing ::after pseudo-element since we're using mask-image */
 .post-content.short::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, var(--card-bg));
+    content: none;
+}
+
+.post-content:not(.short) {
+    max-height: none !important;
+    mask-image: none;
+    -webkit-mask-image: none;
 }
 
 /* Takeaway Section */
@@ -616,7 +771,10 @@ body {
     white-space: nowrap;
 }
 
-/* Source Section */
+/* ============================================= */
+/* Clickable Sources */
+/* ============================================= */
+
 .post-source {
     margin: 15px 0;
     padding: 10px;
@@ -636,21 +794,51 @@ body {
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.4;
+    word-break: break-all;
 }
 
-/* Read More Button */
-.read-more-btn {
-    background-color: var(--accent);
-    color: white;
-    border: none;
+.source-link {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+    transition: all 0.2s ease;
+}
+
+.source-link:hover {
+    color: var(--hover);
+    border-bottom: 1px solid var(--hover);
+}
+
+/* ============================================= */
+/* Post Actions - Side by Side Buttons */
+/* ============================================= */
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.read-more-btn, .view-media-btn {
+    flex: 1;
+    min-width: 120px;
     padding: 10px 20px;
     border-radius: 30px;
     font-weight: 600;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px;
     transition: all 0.3s ease;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+}
+
+.read-more-btn {
+    background-color: var(--accent);
+    color: white;
 }
 
 .read-more-btn:hover {
@@ -660,6 +848,24 @@ body {
     box-shadow: 0 4px 8px rgba(255, 152, 0, 0.2);
 }
 
+.view-media-btn {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.view-media-btn:hover {
+    background-color: var(--hover);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.read-more-btn i,
+.view-media-btn i {
+    font-size: 14px;
+}
+
 /* Media Modal Styles */
 .media-modal {
     position: fixed;
@@ -667,7 +873,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2000;
+    z-index: 2001;
     display: none;
     justify-content: center;
     align-items: center;
@@ -697,7 +903,7 @@ body {
     max-height: 90vh;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    z-index: 2001;
+    z-index: 2002;
     animation: modalFadeIn 0.3s ease;
 }
 
@@ -724,7 +930,7 @@ body {
     border-radius: 50%;
     font-size: 20px;
     cursor: pointer;
-    z-index: 2002;
+    z-index: 2003;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -892,7 +1098,7 @@ body {
     --text-secondary: var(--text-secondary-dark);
     --border: var(--border-dark);
     --accent: var(--accent-dark);
-    --card-bg: var(--card-bg-dark);
+    --card-bg: var(---bg-dark);
     --hover: var(--hover-dark);
 }
 
@@ -908,7 +1114,10 @@ body {
     --hover: var(--hover-light);
 }
 
+/* ============================================= */
 /* Responsive Design */
+/* ============================================= */
+
 @media (max-width: 768px) {
     .team-members {
         flex-direction: column;
@@ -949,6 +1158,28 @@ body {
         padding: 12px;
         font-size: 12px;
     }
+    
+    /* Responsive Translate Button */
+    .translate-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+    
+    .language-popup {
+        width: 180px;
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    /* Responsive Post Actions */
+    .post-actions {
+        flex-direction: column;
+    }
+    
+    .read-more-btn, .view-media-btn {
+        width: 100%;
+    }
 }
 
 @media (max-width: 576px) {
@@ -963,6 +1194,7 @@ body {
     
     .post-avatar {
         margin-bottom: 10px;
+        margin-right: 0;
     }
     
     .header {
@@ -991,5 +1223,40 @@ body {
     .footer {
         padding: 10px;
         font-size: 11px;
+    }
+    
+    /* Mobile Translate Button */
+    .translate-btn {
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    [dir="rtl"] .translate-btn {
+        right: auto;
+        left: 10px;
+    }
+    
+    /* Mobile Language Popup */
+    .language-popup {
+        width: 160px;
+        bottom: 5px;
+        right: 5px;
+    }
+    
+    .language-popup-header {
+        padding: 12px;
+    }
+    
+    .language-option {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    /* Adjust post card padding for mobile */
+    .post-card {
+        padding-top: 50px;
+        padding: 15px;
     }
 }
