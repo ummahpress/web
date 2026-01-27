@@ -1,0 +1,55 @@
+/* STICKY FOOTER SECTION */
+.footer {
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: auto;
+    width: 100%;
+    z-index: 10;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.footer a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.footer a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+@media (max-width: 992px) {
+    .footer {
+        padding: 15px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer {
+        padding: 10px;
+        font-size: 11px;
+    }
+}

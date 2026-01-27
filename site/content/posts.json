@@ -1,0 +1,41 @@
+[
+    {
+        "id": 1,
+        "author": "Ummah Press",
+        "date": "2023-06-15",
+        "avatar": "assets/images/avatar.png",
+        "categories": ["World News", "Politics"],
+        "categoryIds": ["world-news", "politics"],
+        "content": "Global leaders gather for emergency summit on climate change. The conference, held in Dubai, brings together representatives from over 190 countries to discuss urgent measures to combat the escalating climate crisis. Key topics include carbon emission reduction targets, renewable energy investments, and climate adaptation funding for vulnerable nations.",
+        "source": "United Nations Climate Change Conference (COP28) official statements and press releases.",
+        "likes": 42,
+        "shares": 18,
+        "comments": 7
+    },
+    {
+        "id": 2,
+        "author": "Rizky Al indunisi",
+        "date": "2023-06-12",
+        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+        "categories": ["Technology", "Business"],
+        "categoryIds": ["technology", "business"],
+        "content": "New breakthrough in quantum computing announced by researchers at leading tech institute. The development could revolutionize data processing and cryptography. The quantum processor demonstrated the ability to solve complex problems in minutes that would take traditional supercomputers thousands of years. This advancement has significant implications for fields ranging from medicine to artificial intelligence.",
+        "source": "Nature Journal, Volume 618, Issue 7965, pp. 467-471 (2023)",
+        "likes": 89,
+        "shares": 34,
+        "comments": 21
+    },
+    {
+        "id": 3,
+        "author": "Ummah Step",
+        "date": "2023-06-10",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+        "categories": ["Health", "Science"],
+        "categoryIds": ["health", "science"],
+        "content": "Major study reveals significant benefits of intermittent fasting for metabolic health. The research, published in the New England Journal of Medicine, followed participants for over a year and found improved insulin sensitivity, reduced inflammation markers, and better cardiovascular health among those practicing time-restricted eating. However, experts caution that the approach may not be suitable for everyone, especially those with certain medical conditions.",
+        "source": "New England Journal of Medicine, Vol. 388, No. 23, June 8, 2023",
+        "likes": 156,
+        "shares": 72,
+        "comments": 45
+    }
+]
