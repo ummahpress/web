@@ -1,4 +1,4 @@
-// Ummah Press App - Simplified Version
+// Ummah Press App - Enhanced Version
 
 // DOM Elements
 const body = document.body;
@@ -21,12 +21,25 @@ const currentYear = document.getElementById('currentYear');
 // Data variables
 let authors = [];
 let posts = [];
+let translations = {};
 
 // Categories (fixed list)
 const categories = [
     "World News", "Politics", "Technology", "Health", "Education", 
     "Business", "Sports", "Entertainment", "Science", "Religion"
 ];
+
+// Available languages
+const languages = {
+    'en': { name: 'English', code: 'en', dir: 'ltr' },
+    'ar': { name: 'العربية', code: 'ar', dir: 'rtl' },
+    'ur': { name: 'اردو', code: 'ur', dir: 'rtl' },
+    'fr': { name: 'Français', code: 'fr', dir: 'ltr' },
+    'es': { name: 'Español', code: 'es', dir: 'ltr' },
+    'id': { name: 'Bahasa Indonesia', code: 'id', dir: 'ltr' }
+};
+
+let currentLanguage = localStorage.getItem('ummahpress-language') || 'en';
 
 // =============================================
 // Load Data from JSON Files
@@ -41,6 +54,14 @@ async function loadData() {
         // Load posts
         const postsResponse = await fetch('data/posts.json');
         posts = await postsResponse.json();
+        
+        // Load translations if available
+        try {
+            const translationsResponse = await fetch('data/translations.json');
+            translations = await translationsResponse.json();
+        } catch (error) {
+            console.log('No translations file found, continuing without translations.');
+        }
         
         return true;
     } catch (error) {
@@ -120,6 +141,125 @@ function closeMediaModal() {
 }
 
 // =============================================
+// Translation Functions
+// =============================================
+
+function createTranslationButton(postId) {
+    const btn = document.createElement('button');
+    btn.className = 'translate-btn';
+    btn.innerHTML = '<i class="fas fa-language"></i>';
+    btn.title = 'Translate post';
+    btn.dataset.postId = postId;
+    btn.addEventListener('click', openLanguagePopup);
+    return btn;
+}
+
+function openLanguagePopup(e) {
+    const postId = e.currentTarget.dataset.postId;
+    const postCard = e.currentTarget.closest('.post-card');
+    
+    // Remove existing popup if any
+    const existingPopup = document.querySelector('.language-popup');
+    if (existingPopup) existingPopup.remove();
+    
+    // Create popup
+    const popup = document.createElement('div');
+    popup.className = 'language-popup';
+    popup.innerHTML = `
+        <div class="language-popup-header">
+            <h4>Translate Post</h4>
+            <button class="popup-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="language-list" id="languageList-${postId}">
+            ${Object.values(languages).map(lang => `
+                <div class="language-option ${lang.code === currentLanguage ? 'active' : ''}" 
+                     data-lang="${lang.code}" 
+                     data-post-id="${postId}">
+                    ${lang.name}
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    // Position popup near the translate button
+    const btnRect = e.currentTarget.getBoundingClientRect();
+    popup.style.position = 'fixed';
+    popup.style.bottom = '20px';
+    popup.style.right = '20px';
+    popup.style.zIndex = '1002';
+    
+    document.body.appendChild(popup);
+    
+    // Add event listeners
+    popup.querySelector('.popup-close-btn').addEventListener('click', () => popup.remove());
+    popup.querySelectorAll('.language-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            const lang = e.currentTarget.dataset.lang;
+            const postId = e.currentTarget.dataset.postId;
+            translatePost(postId, lang);
+            popup.remove();
+        });
+    });
+    
+    // Close popup when clicking outside
+    setTimeout(() => {
+        const clickHandler = (event) => {
+            if (!popup.contains(event.target) && !e.currentTarget.contains(event.target)) {
+                popup.remove();
+                document.removeEventListener('click', clickHandler);
+            }
+        };
+        document.addEventListener('click', clickHandler);
+    }, 100);
+}
+
+function translatePost(postId, languageCode) {
+    const post = posts.find(p => p.id == postId);
+    if (!post) return;
+    
+    // Update current language
+    currentLanguage = languageCode;
+    localStorage.setItem('ummahpress-language', languageCode);
+    
+    // Get translation data
+    const translation = translations[postId]?.[languageCode];
+    
+    // Find post card elements
+    const postCard = document.querySelector(`[data-post-id="${postId}"]`)?.closest('.post-card');
+    if (!postCard) return;
+    
+    // Update content with translation or fallback to original
+    const titleElement = postCard.querySelector('.post-title');
+    const contentElement = postCard.querySelector('.post-content');
+    const takeawayElement = postCard.querySelector('.post-takeaway .takeaway-text');
+    const sourceElement = postCard.querySelector('.source-text');
+    
+    if (titleElement) {
+        titleElement.textContent = translation?.title || post.title;
+    }
+    
+    if (contentElement) {
+        contentElement.innerHTML = translation?.content || post.content;
+        // Re-check if we need "Read More" button after translation
+        setTimeout(() => checkContentHeight(contentElement), 100);
+    }
+    
+    if (takeawayElement) {
+        takeawayElement.textContent = translation?.takeaway || post.takeaway;
+    }
+    
+    if (sourceElement) {
+        const source = translation?.source || post.source;
+        sourceElement.innerHTML = makeSourceClickable(source);
+    }
+    
+    // Update language direction if needed
+    const dir = languages[languageCode]?.dir || 'ltr';
+    postCard.style.direction = dir;
+    postCard.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+}
+
+// =============================================
 // Helper Functions
 // =============================================
 
@@ -131,6 +271,45 @@ function formatDate(dateString) {
 
 function getAuthorById(id) {
     return authors.find(author => author.id === id) || authors[0];
+}
+
+function makeSourceClickable(source) {
+    // Check if source is a URL
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    if (urlPattern.test(source)) {
+        return source.replace(urlPattern, url => {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="source-link">${url}</a>`;
+        });
+    }
+    // Check if source contains a domain without http
+    const domainPattern = /\b(www\.[^\s]+|\b[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?(\/[^\s]*)?)/gi;
+    return source.replace(domainPattern, domain => {
+        if (!domain.startsWith('http')) {
+            return `<a href="http://${domain}" target="_blank" rel="noopener noreferrer" class="source-link">${domain}</a>`;
+        }
+        return domain;
+    });
+}
+
+function checkContentHeight(contentElement) {
+    const lineHeight = parseInt(getComputedStyle(contentElement).lineHeight);
+    const maxHeight = lineHeight * 4; // 4 lines
+    const actualHeight = contentElement.scrollHeight;
+    
+    const postId = contentElement.id.replace('post-content-', '');
+    const readMoreBtn = document.querySelector(`.read-more-btn[data-post-id="${postId}"]`);
+    
+    if (readMoreBtn) {
+        if (actualHeight <= maxHeight) {
+            // Content is short, hide read more button
+            readMoreBtn.style.display = 'none';
+            contentElement.classList.remove('short');
+        } else {
+            // Content is long, show read more button
+            readMoreBtn.style.display = 'flex';
+            contentElement.classList.add('short');
+        }
+    }
 }
 
 // =============================================
@@ -175,6 +354,13 @@ function renderPosts(categorySlug = 'all') {
     
     setupReadMoreButtons();
     setupMediaButtons();
+    
+    // Check content height after rendering
+    setTimeout(() => {
+        document.querySelectorAll('.post-content').forEach(contentElement => {
+            checkContentHeight(contentElement);
+        });
+    }, 100);
 }
 
 function createPostElement(post, author) {
@@ -198,7 +384,7 @@ function createPostElement(post, author) {
         
         ${post.title ? `<h3 class="post-title">${post.title}</h3>` : ''}
         
-        <div class="post-content short" id="post-content-${post.id}">
+        <div class="post-content short" id="post-content-${post.id}" data-post-id="${post.id}">
             ${post.content}
         </div>
         
@@ -211,7 +397,7 @@ function createPostElement(post, author) {
         
         <div class="post-source">
             <div class="source-label">Source:</div>
-            <div class="source-text">${post.source}</div>
+            <div class="source-text">${makeSourceClickable(post.source)}</div>
         </div>
         
         <div class="post-actions">
@@ -226,6 +412,10 @@ function createPostElement(post, author) {
             ` : ''}
         </div>
     `;
+    
+    // Add translate button to top right corner
+    const translateBtn = createTranslationButton(post.id);
+    postElement.appendChild(translateBtn);
     
     return postElement;
 }
@@ -249,9 +439,9 @@ function setupMediaButtons() {
 }
 
 function toggleReadMore(e) {
-    const postId = e.target.dataset.postId || e.target.closest('.read-more-btn').dataset.postId;
+    const btn = e.currentTarget;
+    const postId = btn.dataset.postId;
     const contentElement = document.getElementById(`post-content-${postId}`);
-    const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('.read-more-btn');
     
     if (contentElement.classList.contains('short')) {
         contentElement.classList.remove('short');
@@ -422,8 +612,22 @@ async function initApp() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeSidebar();
+            const popup = document.querySelector('.language-popup');
+            if (popup) popup.remove();
         }
     });
+    
+    // Apply saved language preference
+    if (currentLanguage !== 'en') {
+        setTimeout(() => {
+            document.querySelectorAll('.post-card').forEach(card => {
+                const postId = card.querySelector('.post-content')?.dataset.postId;
+                if (postId) {
+                    translatePost(postId, currentLanguage);
+                }
+            });
+        }, 500);
+    }
 }
 
 // Start app
