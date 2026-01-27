@@ -1,19 +1,18 @@
 {
-  "site": {
-    "title": "UMMH Press",
-    "tagline": "Rapid News Updates",
-    "description": "Real-time Rapid News Updates.",
-    "primaryColor": "#FF6600",
-    "logo": "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__1_-removebg-preview.png"
-  },
-  "categories": [
-    {"id": "all", "name": "All Updates"},
-    {"id": "breaking", "name": "Breaking News"},
-    {"id": "politics", "name": "Politics"},
-    {"id": "tech", "name": "Technology"},
-    {"id": "business", "name": "Business"},
-    {"id": "sports", "name": "Sports"},
-    {"id": "health", "name": "Health"},
-    {"id": "entertainment", "name": "Entertainment"}
-  ]
+    "site": {
+        "title": "UMMAH Press",
+        "tagline": "Rapid News Updates",
+        "description": "Real-time news as it happens. Stay informed with UMMAH Press.",
+        "primaryColor": "#FF6600"
+    },
+    "categories": [
+        {"id": "all", "name": "All Updates"},
+        {"id": "breaking", "name": "Breaking News"},
+        {"id": "politics", "name": "Politics"},
+        {"id": "tech", "name": "Technology"},
+        {"id": "business", "name": "Business"},
+        {"id": "sports", "name": "Sports"},
+        {"id": "health", "name": "Health"},
+        {"id": "entertainment", "name": "Entertainment"}
+    ]
 }
