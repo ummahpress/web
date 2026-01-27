@@ -1,5 +1,5 @@
 // Ummah Press App - Complete JavaScript File
-// All functionality in one file
+// Clean start with two authors and no posts
 
 // =============================================
 // DOM Elements
@@ -24,134 +24,36 @@ const currentUserName = document.getElementById('currentUserName');
 const currentUserAvatar = document.getElementById('currentUserAvatar');
 
 // =============================================
-// Data Arrays (Replace with your content)
+// Data Arrays - CLEAN START
 // =============================================
 
+// ONLY TWO AUTHORS
 const authors = [
     {
         id: 1,
-        name: "Ummah Press",
-        role: "Editorial Team",
+        name: "Ummah Step",
+        role: "Founder & Editor-in-Chief",
         avatar: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
-        bio: "The official Ummah Press editorial team dedicated to delivering accurate and timely news to the Muslim community worldwide."
+        bio: "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media. His passion for delivering accurate and timely news to the Muslim community drives the mission of Ummah Press."
     },
     {
         id: 2,
-        name: "Ummah Step",
-        role: "Founder & Editor-in-Chief",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-        bio: "Ummah Step is the visionary behind Ummah Press, with over 10 years of experience in journalism and media."
-    },
-    {
-        id: 3,
         name: "Rizky Al indunisi",
         role: "Chief Reporter",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-        bio: "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events."
+        avatar: "https://ik.imagekit.io/ummahpress/UMMAH_PRESS__2_-removebg-preview.PNG",
+        bio: "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events. His dedication to truthful reporting and deep understanding of global affairs makes him an invaluable asset to our team."
     }
 ];
 
+// Categories (you can keep or modify these)
 const categories = [
     "World News", "Politics", "Technology", "Health", "Education", 
     "Business", "Sports", "Entertainment", "Science", "Religion"
 ];
 
+// EMPTY POSTS ARRAY - START FRESH
 const posts = [
-    {
-        id: 1,
-        authorId: 1,
-        date: "2023-06-15",
-        categories: ["World News", "Politics"],
-        title: "Global Climate Summit 2023",
-        content: "Global leaders gather for emergency summit on climate change. The conference, held in Dubai, brings together representatives from over 190 countries to discuss urgent measures to combat the escalating climate crisis. Key topics include carbon emission reduction targets, renewable energy investments, and climate adaptation funding for vulnerable nations.",
-        excerpt: "Global leaders gather for emergency summit on climate change...",
-        source: "United Nations Climate Change Conference (COP28) official statements and press releases.",
-        takeaway: "The summit marks a crucial turning point in global climate policy, with unprecedented commitments from major economies.",
-        media: {
-            type: "image",
-            url: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            caption: "World leaders at the climate summit in Dubai",
-            credit: "Photo by United Nations",
-            thumbnail: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: true
-    },
-    {
-        id: 2,
-        authorId: 2,
-        date: "2023-06-12",
-        categories: ["Technology", "Business"],
-        title: "Quantum Computing Breakthrough",
-        content: "New breakthrough in quantum computing announced by researchers at leading tech institute. The development could revolutionize data processing and cryptography. The quantum processor demonstrated the ability to solve complex problems in minutes that would take traditional supercomputers thousands of years. This advancement has significant implications for fields ranging from medicine to artificial intelligence.",
-        excerpt: "New breakthrough in quantum computing announced by researchers...",
-        source: "Nature Journal, Volume 618, Issue 7965, pp. 467-471 (2023)",
-        takeaway: "Quantum computing has reached a milestone where practical applications in medicine and cryptography are now within reach.",
-        media: {
-            type: "image",
-            url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-            caption: "Quantum processor chip",
-            credit: "Photo by IBM Research",
-            thumbnail: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: true
-    },
-    {
-        id: 3,
-        authorId: 3,
-        date: "2023-06-10",
-        categories: ["Health", "Science"],
-        title: "Intermittent Fasting Study",
-        content: "Major study reveals significant benefits of intermittent fasting for metabolic health. The research, published in the New England Journal of Medicine, followed participants for over a year and found improved insulin sensitivity, reduced inflammation markers, and better cardiovascular health among those practicing time-restricted eating. However, experts caution that the approach may not be suitable for everyone, especially those with certain medical conditions.",
-        excerpt: "Major study reveals significant benefits of intermittent fasting...",
-        source: "New England Journal of Medicine, Vol. 388, No. 23, June 8, 2023",
-        takeaway: "Time-restricted eating shows promising results for metabolic health but requires medical supervision for certain individuals.",
-        media: {
-            type: "video",
-            url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-            caption: "Dr. Sarah Johnson explains the study findings",
-            credit: "NEJM Video Brief",
-            thumbnail: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: false
-    },
-    {
-        id: 4,
-        authorId: 1,
-        date: "2023-06-08",
-        categories: ["Education", "Religion"],
-        title: "Islamic Education Initiative",
-        content: "New initiative launched to integrate Islamic studies with modern education curriculum. The program, developed by scholars and educators, aims to provide a holistic educational approach that combines traditional Islamic knowledge with contemporary academic disciplines. Pilot programs are set to begin in several countries next academic year, with plans for expansion based on initial results and feedback from participating communities.",
-        excerpt: "New initiative launched to integrate Islamic studies with modern education...",
-        source: "International Islamic Education Council annual report and press conference statements.",
-        takeaway: "This program could bridge the gap between traditional Islamic education and modern academic requirements.",
-        media: {
-            type: "image",
-            url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            caption: "Students in a modern Islamic classroom",
-            credit: "Photo by Education Initiative",
-            thumbnail: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: true
-    },
-    {
-        id: 5,
-        authorId: 2,
-        date: "2023-06-05",
-        categories: ["Sports", "Entertainment"],
-        title: "Historic Sports Victory",
-        content: "Historic victory for national team in international championship finals. The underdog team's remarkable performance has captivated the nation, with millions tuning in to watch the final match. The coach's innovative strategy and the players' exceptional teamwork were credited for the unexpected win. Celebrations erupted across the country following the victory, with fans praising the team's dedication and perseverance throughout the tournament.",
-        excerpt: "Historic victory for national team in international championship finals...",
-        source: "International Sports Federation official match report and post-game interviews.",
-        takeaway: "The victory demonstrates the importance of innovative coaching and team unity in achieving unexpected success.",
-        media: {
-            type: "video",
-            url: "https://www.youtube.com/embed/9bZkp7q19f0",
-            caption: "Championship final highlights",
-            credit: "Sports Network",
-            thumbnail: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=50"
-        },
-        featured: false
-    }
+    // Add your posts here following the structure below
 ];
 
 // =============================================
@@ -159,7 +61,6 @@ const posts = [
 // =============================================
 
 function openMediaModal(media) {
-    // Create modal if it doesn't exist
     let modal = document.getElementById('mediaModal');
     if (!modal) {
         modal = document.createElement('div');
@@ -178,11 +79,9 @@ function openMediaModal(media) {
         `;
         document.body.appendChild(modal);
         
-        // Add event listeners
         document.getElementById('modalOverlay').addEventListener('click', closeMediaModal);
         document.getElementById('modalCloseBtn').addEventListener('click', closeMediaModal);
         
-        // Escape key to close modal
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 closeMediaModal();
@@ -190,7 +89,6 @@ function openMediaModal(media) {
         });
     }
     
-    // Set media content
     const mediaContainer = document.getElementById('modalMediaContainer');
     const captionElement = document.getElementById('modalCaption');
     const creditElement = document.getElementById('modalCredit');
@@ -216,7 +114,6 @@ function openMediaModal(media) {
         creditElement.textContent = `📷 ${media.credit}`;
     }
     
-    // Show modal
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -260,8 +157,11 @@ function renderPosts(categorySlug = 'all') {
     if (filteredPosts.length === 0) {
         postsContainer.innerHTML = `
             <div class="post-card" style="text-align: center;">
-                <h3>No posts found for this category</h3>
-                <p>Try selecting a different category</p>
+                <h3>No posts yet</h3>
+                <p>Check back soon for news updates!</p>
+                <div style="margin-top: 20px; color: var(--text-secondary);">
+                    <p><small>To add posts, edit the <code>js/app.js</code> file</small></p>
+                </div>
             </div>
         `;
         return;
@@ -273,7 +173,6 @@ function renderPosts(categorySlug = 'all') {
         postsContainer.appendChild(postElement);
     });
     
-    // Add event listeners to "Read More" buttons
     setupReadMoreButtons();
 }
 
@@ -341,7 +240,6 @@ function createPostElement(post, author) {
         <button class="read-more-btn" data-post-id="${post.id}">Read More</button>
     `;
     
-    // Add click event to media link
     if (post.media) {
         const mediaLink = postElement.querySelector('.post-media-link');
         mediaLink.addEventListener('click', () => openMediaModal(post.media));
@@ -373,13 +271,11 @@ function toggleReadMore(e) {
 function filterPostsByCategory(e) {
     const category = e.target.dataset.category;
     
-    // Update active category
     document.querySelectorAll('.category').forEach(cat => {
         cat.classList.remove('active');
     });
     e.target.classList.add('active');
     
-    // Render filtered posts
     renderPosts(category);
 }
 
@@ -421,7 +317,6 @@ function setActivePage(page) {
         renderTeamMembers();
     }
     
-    // Update navigation links
     navLinks.forEach(link => {
         if (link.dataset.page === page) {
             link.classList.add('active');
@@ -430,10 +325,7 @@ function setActivePage(page) {
         }
     });
     
-    // Close sidebar
     closeSidebar();
-    
-    // Reset scroll position
     window.scrollTo(0, 0);
 }
 
@@ -444,7 +336,6 @@ function setActivePage(page) {
 function renderCategories() {
     categoriesContainer.innerHTML = '';
     
-    // Add "All" category
     const allCategory = document.createElement('div');
     allCategory.className = 'category active';
     allCategory.textContent = 'All';
@@ -452,7 +343,6 @@ function renderCategories() {
     allCategory.addEventListener('click', filterPostsByCategory);
     categoriesContainer.appendChild(allCategory);
     
-    // Add other categories
     categories.forEach(category => {
         const categoryElement = document.createElement('div');
         categoryElement.className = 'category';
@@ -506,21 +396,16 @@ function closeSidebar() {
 // =============================================
 
 function initApp() {
-    // Set current year in footer
     currentYear.textContent = new Date().getFullYear();
     
-    // Set initial theme
     const savedTheme = localStorage.getItem('ummahpress-theme') || 'dark';
     setTheme(savedTheme);
     
-    // Set initial user
     currentUserName.textContent = authors[0].name;
     currentUserAvatar.src = authors[0].avatar;
     
-    // Set initial page
     setActivePage('home');
     
-    // Add event listeners
     sidebarCloseBtn.addEventListener('click', closeSidebar);
     mobileMenuToggle.addEventListener('click', openSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
@@ -536,7 +421,6 @@ function initApp() {
         });
     });
     
-    // Escape key to close sidebar
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeSidebar();
