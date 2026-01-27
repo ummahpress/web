@@ -6,7 +6,7 @@ class UIController {
         this.currentPage = 'home';
         this.activeFilter = 'all';
         this.expandedPosts = new Set();
-        this.isMobile = window.innerWidth <= 1200;
+        this.isMobile = window.innerWidth <= 1024;
     }
 
     // Initialize UI
@@ -20,14 +20,13 @@ class UIController {
         this.renderTeamMembers();
         this.renderCategoryFilters();
         this.renderPosts();
-        this.setupCategoryFilterNavigation();
         
         // Update time every minute
         setInterval(() => this.updateTime(), 60000);
         
         // Update mobile detection on resize
         window.addEventListener('resize', () => {
-            this.isMobile = window.innerWidth <= 1200;
+            this.isMobile = window.innerWidth <= 1024;
             this.updateSidebarState();
         });
     }
@@ -87,38 +86,11 @@ class UIController {
                 this.closeSidebar();
             }
         });
-    }
-
-    // Setup category filter navigation
-    setupCategoryFilterNavigation() {
-        const filtersScroll = document.querySelector('.filters-scroll');
-        const prevBtn = document.getElementById('filterPrev');
-        const nextBtn = document.getElementById('filterNext');
         
-        if (!filtersScroll || !prevBtn || !nextBtn) return;
-        
-        prevBtn.addEventListener('click', () => {
-            filtersScroll.scrollBy({ left: -200, behavior: 'smooth' });
+        // Update category filter scroll on resize
+        window.addEventListener('resize', () => {
+            this.updateCategoryFilterScroll();
         });
-        
-        nextBtn.addEventListener('click', () => {
-            filtersScroll.scrollBy({ left: 200, behavior: 'smooth' });
-        });
-        
-        // Show/hide navigation buttons based on scroll position
-        filtersScroll.addEventListener('scroll', () => {
-            const scrollLeft = filtersScroll.scrollLeft;
-            const scrollWidth = filtersScroll.scrollWidth;
-            const clientWidth = filtersScroll.clientWidth;
-            
-            prevBtn.style.display = scrollLeft > 0 ? 'flex' : 'none';
-            nextBtn.style.display = scrollLeft < (scrollWidth - clientWidth - 10) ? 'flex' : 'none';
-        });
-        
-        // Initial check
-        setTimeout(() => {
-            filtersScroll.dispatchEvent(new Event('scroll'));
-        }, 100);
     }
 
     // Toggle theme
@@ -235,9 +207,18 @@ class UIController {
         document.getElementById('currentTime').textContent = timeString;
     }
 
+    // Update category filter scroll
+    updateCategoryFilterScroll() {
+        const filtersScroll = document.getElementById('filtersScroll');
+        if (!filtersScroll) return;
+        
+        // Just ensure it's scrollable
+        filtersScroll.style.overflowX = 'auto';
+    }
+
     // Render category filters
     renderCategoryFilters() {
-        const container = document.querySelector('.filters-scroll');
+        const container = document.getElementById('filtersScroll');
         if (!container) return;
         
         const categories = window.siteData?.categories || [];
@@ -245,7 +226,7 @@ class UIController {
         container.innerHTML = `
             <button class="filter-btn ${this.activeFilter === 'all' ? 'active' : ''}" 
                     data-filter="all" onclick="uiController.filterPosts('all')">
-                <i class="fas fa-globe"></i> All News
+                <i class="fas fa-newspaper"></i> All News
             </button>
             ${categories.map(category => `
                 <button class="filter-btn ${this.activeFilter === category ? 'active' : ''}" 
@@ -255,8 +236,7 @@ class UIController {
             `).join('')}
         `;
         
-        // Re-setup navigation after rendering
-        setTimeout(() => this.setupCategoryFilterNavigation(), 100);
+        this.updateCategoryFilterScroll();
     }
 
     // Filter posts by category
@@ -264,14 +244,6 @@ class UIController {
         this.activeFilter = category;
         this.renderCategoryFilters();
         this.renderPosts();
-        
-        // Update active filter button
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.filter === category) {
-                btn.classList.add('active');
-            }
-        });
     }
 
     // Render team members
@@ -286,25 +258,25 @@ class UIController {
                 <img src="${member.avatar}" 
                      alt="${member.name}" 
                      class="member-avatar"
-                     onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=FF6B35&color=fff&size=120'">
+                     onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=000000&color=fff&size=120'">
                 <h3 class="member-name">${member.name}</h3>
                 <p class="member-title">${member.title}</p>
                 <div class="member-bio">${member.bio}</div>
                 <div class="member-social">
                     <a href="https://tiktok.com/${member.social.tiktok.replace('@', '')}" 
                        target="_blank" 
-                       class="social-link tiktok"
+                       class="social-link"
                        title="TikTok">
                         <i class="fab fa-tiktok"></i>
                     </a>
                     <a href="https://instagram.com/${member.social.instagram.replace('@', '')}" 
                        target="_blank" 
-                       class="social-link instagram"
+                       class="social-link"
                        title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
                     <a href="#" 
-                       class="social-link upscrolled"
+                       class="social-link"
                        title="Upscrolled"
                        onclick="alert('Upscrolled profile: ${member.social.upscrolled}')">
                         <i class="fas fa-arrow-up"></i>
@@ -324,7 +296,7 @@ class UIController {
         // Apply category filter
         if (this.activeFilter !== 'all') {
             posts = posts.filter(post => 
-                post.categories.includes(this.activeFilter)
+                post.categories && post.categories.includes(this.activeFilter)
             );
         }
         
@@ -350,11 +322,12 @@ class UIController {
             
             return `
                 <article class="post-card" data-post-id="${post.id}">
+                    ${post.featured ? '<div class="featured-badge">Featured</div>' : ''}
                     <div class="post-header">
                         <img src="${post.authorAvatar}" 
                              alt="${post.author}" 
                              class="author-avatar"
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=FF6B35&color=fff&size=50'">
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=000000&color=fff&size=50'">
                         <div class="author-info">
                             <div class="author-name">${post.author}</div>
                             <div class="post-date">
@@ -378,11 +351,12 @@ class UIController {
                     
                     <div class="post-categories">
                         ${post.categories.map(cat => `
-                            <span class="category-tag">${cat}</span>
+                            <span class="category-tag ${this.activeFilter === cat ? 'active' : ''}" 
+                                  onclick="uiController.filterPosts('${cat}')">
+                                #${cat}
+                            </span>
                         `).join('')}
                     </div>
-                    
-                    ${post.featured ? '<div class="featured-badge">Featured</div>' : ''}
                 </article>
             `;
         }).join('');
