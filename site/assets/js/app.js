@@ -2,6 +2,7 @@
 class AppController {
     constructor() {
         this.dataLoaded = false;
+        this.filteredPosts = [];
     }
 
     // Initialize application
@@ -17,6 +18,7 @@ class AppController {
             this.dataLoaded = true;
             
             console.log('Ummah Press application initialized successfully');
+            this.setupServiceWorker();
         } catch (error) {
             console.error('Failed to initialize application:', error);
             this.handleInitializationError(error);
@@ -31,7 +33,8 @@ class AppController {
             window.siteData = {
                 config: {},
                 team: [],
-                posts: []
+                posts: [],
+                categories: []
             };
             
             // Try to load from JSON files
@@ -48,6 +51,8 @@ class AppController {
                 
                 if (postsResponse.status === 'fulfilled' && postsResponse.value.ok) {
                     window.siteData.posts = await postsResponse.value.json();
+                    // Extract categories from posts
+                    window.siteData.categories = this.extractCategories(window.siteData.posts);
                 }
                 
                 if (settingsResponse.status === 'fulfilled' && settingsResponse.value.ok) {
@@ -57,6 +62,34 @@ class AppController {
                 console.warn('Could not load external data files, using default data');
                 // Use default data from data.js (if it exists)
             }
+        }
+    }
+
+    // Extract unique categories from posts
+    extractCategories(posts) {
+        const categories = new Set();
+        posts.forEach(post => {
+            if (post.categories && Array.isArray(post.categories)) {
+                post.categories.forEach(category => {
+                    categories.add(category);
+                });
+            }
+        });
+        return Array.from(categories).sort();
+    }
+
+    // Setup service worker for offline support
+    setupServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
         }
     }
 
@@ -71,8 +104,8 @@ class AppController {
                 <div class="error-message">
                     <h2>Unable to Load Content</h2>
                     <p>Please check your internet connection and try again.</p>
-                    <button onclick="location.reload()" class="retry-btn">
-                        Retry
+                    <button onclick="location.reload()" class="read-more-btn">
+                        <i class="fas fa-redo"></i> Retry
                     </button>
                 </div>
             `;
@@ -91,6 +124,11 @@ class AppController {
             };
             
             window.siteData.posts.unshift(newPost);
+            
+            // Update categories
+            window.siteData.categories = this.extractCategories(window.siteData.posts);
+            
+            uiController.renderCategoryFilters();
             uiController.renderPosts();
             return true;
         } catch (error) {
@@ -104,7 +142,7 @@ class AppController {
         if (!this.dataLoaded) return [];
         
         return window.siteData.posts.filter(post => 
-            post.categories.includes(category)
+            post.categories && post.categories.includes(category)
         );
     }
 
@@ -121,10 +159,10 @@ class AppController {
         
         const searchTerm = query.toLowerCase();
         return window.siteData.posts.filter(post => 
-            post.title.toLowerCase().includes(searchTerm) ||
-            post.excerpt.toLowerCase().includes(searchTerm) ||
-            post.fullContent.toLowerCase().includes(searchTerm) ||
-            post.categories.some(cat => cat.toLowerCase().includes(searchTerm))
+            (post.title && post.title.toLowerCase().includes(searchTerm)) ||
+            (post.excerpt && post.excerpt.toLowerCase().includes(searchTerm)) ||
+            (post.fullContent && post.fullContent.toLowerCase().includes(searchTerm)) ||
+            (post.categories && post.categories.some(cat => cat.toLowerCase().includes(searchTerm)))
         );
     }
 }
@@ -141,10 +179,78 @@ document.addEventListener('DOMContentLoaded', () => {
 // Handle offline/online status
 window.addEventListener('online', () => {
     console.log('Application is online');
-    // You could add logic to sync data here
+    // Show online notification
+    showNotification('You are back online!', 'success');
 });
 
 window.addEventListener('offline', () => {
     console.log('Application is offline');
-    // You could show an offline indicator here
+    // Show offline notification
+    showNotification('You are offline. Some features may be limited.', 'warning');
 });
+
+// Notification function
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    // Add styles for notification
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 300px;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+            }
+            .notification-success {
+                background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            }
+            .notification-warning {
+                background: linear-gradient(135deg, #FF9800, #EF6C00);
+            }
+            .notification-info {
+                background: linear-gradient(135deg, #2196F3, #0D47A1);
+            }
+            .notification button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 20px;
+                cursor: pointer;
+                margin-left: 15px;
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Add to document
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
