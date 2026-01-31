@@ -1,4 +1,4 @@
-// Ummah Press App - Fixed Version with Better Translation System
+// Ummah Press App - Fixed Version
 
 // DOM Elements
 const sidebar = document.getElementById('sidebar');
@@ -19,7 +19,7 @@ let authors = [];
 let posts = [];
 let translations = {};
 
-// Categories (fixed list)
+// Categories
 const categories = [
     "World News", "Politics", "Technology", "Health", "Education", 
     "Business", "Sports", "Entertainment", "Science", "Religion"
@@ -38,7 +38,7 @@ const languages = {
 let currentLanguage = localStorage.getItem('ummahpress-language') || 'en';
 
 // =============================================
-// Mobile Menu Functions (FIXED)
+// Mobile Menu Functions
 // =============================================
 
 function openSidebar() {
@@ -56,7 +56,6 @@ function closeSidebar() {
 function setupMobileMenu() {
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', openSidebar);
-        console.log('✅ Mobile menu toggle button initialized');
     }
     
     if (sidebarCloseBtn) {
@@ -78,35 +77,43 @@ function setupMobileMenu() {
 }
 
 // =============================================
-// Data Loading Functions (FIXED)
+// Data Loading Functions
 // =============================================
 
 async function loadData() {
     try {
-        console.log('🚀 Loading data...');
+        console.log('Loading data...');
         
         // Load authors
         const authorsResponse = await fetch('data/authors.json');
+        if (!authorsResponse.ok) throw new Error('Failed to load authors');
         authors = await authorsResponse.json();
-        console.log('✅ Authors loaded:', authors.length);
+        console.log('Authors loaded:', authors.length);
         
-        // Load posts from folder structure
+        // Load posts
         posts = await loadPosts();
-        console.log('✅ Posts loaded:', posts.length);
+        console.log('Posts loaded:', posts.length);
         
-        // Load translations using NEW structure
-        translations = await loadTranslations();
-        console.log('✅ Translations loaded');
+        // Load translations
+        const translationsResponse = await fetch('data/translations.json');
+        if (translationsResponse.ok) {
+            translations = await translationsResponse.json();
+            console.log('Translations loaded');
+        } else {
+            console.log('No translations found, using default');
+            translations = {};
+        }
         
         return true;
     } catch (error) {
-        console.error('❌ Error loading data:', error);
-        // Show error message to user
+        console.error('Error loading data:', error);
+        
+        // Show error message
         postsContainer.innerHTML = `
             <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>Error Loading Content</h3>
-                <p>Please check your internet connection and try again.</p>
-                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: var(--accent); border: none; border-radius: 5px; color: white; cursor: pointer;">
+                <h3>Data Loading Error</h3>
+                <p>Could not load content. Check console for details.</p>
+                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
                     Reload Page
                 </button>
             </div>
@@ -119,16 +126,22 @@ async function loadPosts() {
     try {
         // Load posts index
         const indexResponse = await fetch('data/posts-index.json');
+        if (!indexResponse.ok) throw new Error('Failed to load posts index');
         const postFiles = await indexResponse.json();
         
         // Load each post file
         const postPromises = postFiles.map(async (postFile) => {
-            const response = await fetch(`data/posts/${postFile}`);
-            if (!response.ok) {
-                console.warn(`⚠️ Could not load ${postFile}`);
+            try {
+                const response = await fetch(`data/posts/${postFile}`);
+                if (!response.ok) {
+                    console.warn(`Could not load ${postFile}`);
+                    return null;
+                }
+                return await response.json();
+            } catch (err) {
+                console.warn(`Error loading ${postFile}:`, err);
                 return null;
             }
-            return await response.json();
         });
         
         const loadedPosts = await Promise.all(postPromises);
@@ -141,350 +154,6 @@ async function loadPosts() {
         console.error('Error loading posts:', error);
         return [];
     }
-}
-
-// =============================================
-// NEW: Improved Translation System
-// =============================================
-
-async function loadTranslations() {
-    try {
-        // Load the main translations index
-        const response = await fetch('data/translations/translations-index.json');
-        const translationFiles = await response.json();
-        
-        const allTranslations = {};
-        
-        // Load each translation file
-        const translationPromises = translationFiles.map(async (file) => {
-            const fileResponse = await fetch(`data/translations/${file}`);
-            if (!fileResponse.ok) {
-                console.warn(`⚠️ Could not load translation file: ${file}`);
-                return null;
-            }
-            return await fileResponse.json();
-        });
-        
-        const loadedTranslations = await Promise.all(translationPromises);
-        
-        // Combine all translations into one object
-        loadedTranslations.forEach(translation => {
-            if (translation) {
-                Object.assign(allTranslations, translation);
-            }
-        });
-        
-        return allTranslations;
-    } catch (error) {
-        console.error('Error loading translations:', error);
-        return {};
-    }
-}
-
-// =============================================
-// Post Rendering Functions
-// =============================================
-
-function renderPosts(categorySlug = 'all') {
-    postsContainer.innerHTML = '';
-    
-    if (posts.length === 0) {
-        postsContainer.innerHTML = `
-            <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>No posts yet</h3>
-                <p>Check back soon for news updates!</p>
-            </div>
-        `;
-        return;
-    }
-    
-    const filteredPosts = categorySlug === 'all' 
-        ? posts 
-        : posts.filter(post => post.categories.includes(categorySlug));
-    
-    if (filteredPosts.length === 0) {
-        postsContainer.innerHTML = `
-            <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>No posts found for this category</h3>
-                <p>Try selecting a different category</p>
-            </div>
-        `;
-        return;
-    }
-    
-    filteredPosts.forEach(post => {
-        const author = getAuthorById(post.authorId);
-        const postElement = createPostElement(post, author);
-        postsContainer.appendChild(postElement);
-    });
-    
-    // Setup event listeners for read more buttons and media
-    setTimeout(() => {
-        setupPostInteractions();
-    }, 100);
-}
-
-function createPostElement(post, author) {
-    const postElement = document.createElement('div');
-    postElement.className = `post-card ${post.featured ? 'featured' : ''}`;
-    
-    // Get translation for current language or use English as fallback
-    const translation = translations[post.id]?.[currentLanguage] || {};
-    
-    postElement.innerHTML = `
-        <div class="post-header">
-            <img src="${author.avatar}" alt="${author.name}" class="post-avatar">
-            <div>
-                <div class="post-author">${author.name}</div>
-                <div class="post-role">${author.role}</div>
-                <div class="post-date">${formatDate(post.date)}</div>
-            </div>
-        </div>
-        
-        <div class="post-categories">
-            ${post.featured ? '<span class="featured-badge">Featured</span>' : ''}
-            ${post.categories.map(cat => `<span class="post-category">${cat}</span>`).join('')}
-        </div>
-        
-        ${post.title ? `<h3 class="post-title">${translation.title || post.title}</h3>` : ''}
-        
-        <div class="post-content short" id="post-content-${post.id}" data-post-id="${post.id}">
-            ${translation.content || post.content}
-        </div>
-        
-        ${post.takeaway ? `
-        <div class="post-takeaway">
-            <div class="takeaway-label">Key Takeaway:</div>
-            <div class="takeaway-text">${translation.takeaway || post.takeaway}</div>
-        </div>
-        ` : ''}
-        
-        ${post.media ? `
-        <div class="post-media-link" data-media-id="${post.id}">
-            <div class="media-thumbnail-container">
-                <img src="${post.media.url}" alt="${post.media.caption}" class="media-thumbnail">
-                ${post.media.type === 'video' ? '<div class="video-play-icon"><i class="fas fa-play"></i></div>' : ''}
-            </div>
-            <div class="media-info">
-                <span class="media-type">${post.media.type === 'video' ? 'Video' : 'Image'}</span>
-                <span class="media-caption-preview">${post.media.caption}</span>
-            </div>
-        </div>
-        ` : ''}
-        
-        ${post.source ? `
-        <div class="post-source">
-            <div class="source-label">Source:</div>
-            <div class="source-text">${makeSourceClickable(translation.source || post.source)}</div>
-        </div>
-        ` : ''}
-        
-        <div class="post-actions">
-            <button class="read-more-btn" data-post-id="${post.id}">
-                <i class="fas fa-book-reader"></i> Read More
-            </button>
-            
-            ${post.media ? `
-            <button class="view-media-btn" data-media-id="${post.id}">
-                <i class="fas fa-photo-video"></i> View Media
-            </button>
-            ` : ''}
-        </div>
-    `;
-    
-    // Add translate button
-    const translateBtn = createTranslationButton(post.id);
-    postElement.appendChild(translateBtn);
-    
-    // Set text direction based on language
-    const dir = languages[currentLanguage]?.dir || 'ltr';
-    postElement.style.direction = dir;
-    postElement.style.textAlign = dir === 'rtl' ? 'right' : 'left';
-    
-    return postElement;
-}
-
-function setupPostInteractions() {
-    // Read More buttons
-    document.querySelectorAll('.read-more-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const postId = this.dataset.postId;
-            const contentElement = document.getElementById(`post-content-${postId}`);
-            
-            if (contentElement.classList.contains('short')) {
-                contentElement.classList.remove('short');
-                this.innerHTML = '<i class="fas fa-book"></i> Read Less';
-            } else {
-                contentElement.classList.add('short');
-                this.innerHTML = '<i class="fas fa-book-reader"></i> Read More';
-            }
-        });
-    });
-    
-    // Media buttons
-    document.querySelectorAll('.view-media-btn, .post-media-link').forEach(element => {
-        element.addEventListener('click', function() {
-            const postId = this.dataset.mediaId;
-            const post = posts.find(p => p.id == postId);
-            if (post && post.media) {
-                openMediaModal(post.media);
-            }
-        });
-    });
-    
-    // Auto-hide content that's too long
-    document.querySelectorAll('.post-content').forEach(content => {
-        const lineHeight = 24; // Approximate line height
-        const maxHeight = lineHeight * 4;
-        const actualHeight = content.scrollHeight;
-        
-        if (actualHeight <= maxHeight) {
-            content.classList.remove('short');
-            const postId = content.id.replace('post-content-', '');
-            const readMoreBtn = document.querySelector(`.read-more-btn[data-post-id="${postId}"]`);
-            if (readMoreBtn) readMoreBtn.style.display = 'none';
-        }
-    });
-}
-
-// =============================================
-// Translation Functions
-// =============================================
-
-function createTranslationButton(postId) {
-    const btn = document.createElement('button');
-    btn.className = 'translate-btn';
-    btn.innerHTML = '<i class="fas fa-language"></i>';
-    btn.title = 'Translate post';
-    btn.dataset.postId = postId;
-    btn.addEventListener('click', openLanguagePopup);
-    return btn;
-}
-
-function openLanguagePopup(e) {
-    const postId = e.currentTarget.dataset.postId;
-    
-    // Remove existing popup if any
-    const existingPopup = document.querySelector('.language-popup');
-    if (existingPopup) existingPopup.remove();
-    
-    // Create popup
-    const popup = document.createElement('div');
-    popup.className = 'language-popup';
-    popup.innerHTML = `
-        <div class="language-popup-header">
-            <h4>Translate Post</h4>
-            <button class="popup-close-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="language-list">
-            ${Object.values(languages).map(lang => `
-                <div class="language-option ${lang.code === currentLanguage ? 'active' : ''}" 
-                     data-lang="${lang.code}" 
-                     data-post-id="${postId}">
-                    ${lang.name}
-                </div>
-            `).join('')}
-        </div>
-    `;
-    
-    document.body.appendChild(popup);
-    
-    // Add event listeners
-    popup.querySelector('.popup-close-btn').addEventListener('click', () => popup.remove());
-    popup.querySelectorAll('.language-option').forEach(option => {
-        option.addEventListener('click', (e) => {
-            const lang = e.currentTarget.dataset.lang;
-            const postId = e.currentTarget.dataset.postId;
-            translatePost(postId, lang);
-            popup.remove();
-        });
-    });
-}
-
-function translatePost(postId, languageCode) {
-    const post = posts.find(p => p.id == postId);
-    if (!post) return;
-    
-    // Update current language
-    currentLanguage = languageCode;
-    localStorage.setItem('ummahpress-language', languageCode);
-    
-    // Get translation data
-    const translation = translations[postId]?.[languageCode];
-    
-    // Find post card elements
-    const postCard = document.querySelector(`.translate-btn[data-post-id="${postId}"]`)?.closest('.post-card');
-    if (!postCard) return;
-    
-    // Update content with translation or fallback to original
-    const titleElement = postCard.querySelector('.post-title');
-    const contentElement = postCard.querySelector('.post-content');
-    const takeawayElement = postCard.querySelector('.takeaway-text');
-    const sourceElement = postCard.querySelector('.source-text');
-    
-    if (titleElement) {
-        titleElement.textContent = translation?.title || post.title;
-    }
-    
-    if (contentElement) {
-        contentElement.innerHTML = translation?.content || post.content;
-    }
-    
-    if (takeawayElement) {
-        takeawayElement.textContent = translation?.takeaway || post.takeaway;
-    }
-    
-    if (sourceElement) {
-        const source = translation?.source || post.source;
-        sourceElement.innerHTML = makeSourceClickable(source);
-    }
-    
-    // Update language direction
-    const dir = languages[languageCode]?.dir || 'ltr';
-    postCard.style.direction = dir;
-    postCard.style.textAlign = dir === 'rtl' ? 'right' : 'left';
-}
-
-// =============================================
-// Helper Functions
-// =============================================
-
-function formatDate(dateString) {
-    try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            return 'Recent';
-        }
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    } catch (error) {
-        return 'Recent';
-    }
-}
-
-function getAuthorById(id) {
-    return authors.find(author => author.id === id) || authors[0];
-}
-
-function makeSourceClickable(source) {
-    if (!source) return '';
-    
-    // Split by pipe if multiple sources
-    if (source.includes('|')) {
-        const sources = source.split('|').map(s => s.trim());
-        return sources.map(s => {
-            if (s.startsWith('http')) {
-                return `<a href="${s}" target="_blank" rel="noopener noreferrer" class="source-link">${s}</a>`;
-            }
-            return s;
-        }).join('<br>');
-    }
-    
-    if (source.startsWith('http')) {
-        return `<a href="${source}" target="_blank" rel="noopener noreferrer" class="source-link">${source}</a>`;
-    }
-    
-    return source;
 }
 
 // =============================================
@@ -556,6 +225,366 @@ function closeMediaModal() {
 }
 
 // =============================================
+// Translation Functions
+// =============================================
+
+function createTranslationButton(postId) {
+    const btn = document.createElement('button');
+    btn.className = 'translate-btn';
+    btn.innerHTML = '<i class="fas fa-language"></i>';
+    btn.title = 'Translate post';
+    btn.dataset.postId = postId;
+    btn.addEventListener('click', openLanguagePopup);
+    return btn;
+}
+
+function openLanguagePopup(e) {
+    const postId = e.currentTarget.dataset.postId;
+    
+    const existingPopup = document.querySelector('.language-popup');
+    if (existingPopup) existingPopup.remove();
+    
+    const popup = document.createElement('div');
+    popup.className = 'language-popup';
+    popup.innerHTML = `
+        <div class="language-popup-header">
+            <h4>Translate Post</h4>
+            <button class="popup-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="language-list" id="languageList-${postId}">
+            ${Object.values(languages).map(lang => `
+                <div class="language-option ${lang.code === currentLanguage ? 'active' : ''}" 
+                     data-lang="${lang.code}" 
+                     data-post-id="${postId}">
+                    ${lang.name}
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+    
+    popup.querySelector('.popup-close-btn').addEventListener('click', () => popup.remove());
+    popup.querySelectorAll('.language-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            const lang = e.currentTarget.dataset.lang;
+            const postId = e.currentTarget.dataset.postId;
+            translatePost(postId, lang);
+            popup.remove();
+        });
+    });
+}
+
+function translatePost(postId, languageCode) {
+    const post = posts.find(p => p.id == postId);
+    if (!post) return;
+    
+    currentLanguage = languageCode;
+    localStorage.setItem('ummahpress-language', languageCode);
+    
+    const translation = translations[postId]?.[languageCode];
+    
+    const postCard = document.querySelector(`.translate-btn[data-post-id="${postId}"]`)?.closest('.post-card');
+    if (!postCard) return;
+    
+    const titleElement = postCard.querySelector('.post-title');
+    const contentElement = postCard.querySelector('.post-content');
+    const takeawayElement = postCard.querySelector('.takeaway-text');
+    const sourceElement = postCard.querySelector('.source-text');
+    
+    if (titleElement) {
+        titleElement.textContent = translation?.title || post.title;
+    }
+    
+    if (contentElement) {
+        contentElement.innerHTML = translation?.content || post.content;
+    }
+    
+    if (takeawayElement) {
+        takeawayElement.textContent = translation?.takeaway || post.takeaway;
+    }
+    
+    if (sourceElement) {
+        const source = translation?.source || post.source;
+        sourceElement.innerHTML = makeSourceClickable(source);
+    }
+    
+    const dir = languages[languageCode]?.dir || 'ltr';
+    postCard.style.direction = dir;
+    postCard.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+}
+
+// =============================================
+// Helper Functions
+// =============================================
+
+function formatDate(dateString) {
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return 'Recent';
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+        return 'Recent';
+    }
+}
+
+function getAuthorById(id) {
+    return authors.find(author => author.id === id) || authors[0];
+}
+
+function makeSourceClickable(source) {
+    if (!source) return '';
+    
+    // Handle multiple sources separated by pipe
+    if (source.includes('|')) {
+        return source.split('|').map(s => {
+            const trimmed = s.trim();
+            if (trimmed.startsWith('http')) {
+                return `<a href="${trimmed}" target="_blank" rel="noopener noreferrer" class="source-link">${trimmed}</a>`;
+            }
+            return trimmed;
+        }).join('<br>');
+    }
+    
+    if (source.startsWith('http')) {
+        return `<a href="${source}" target="_blank" rel="noopener noreferrer" class="source-link">${source}</a>`;
+    }
+    
+    return source;
+}
+
+function checkContentHeight(contentElement) {
+    const lineHeight = 24;
+    const maxHeight = lineHeight * 4;
+    const actualHeight = contentElement.scrollHeight;
+    
+    const postId = contentElement.id.replace('post-content-', '');
+    const readMoreBtn = document.querySelector(`.read-more-btn[data-post-id="${postId}"]`);
+    
+    if (readMoreBtn) {
+        if (actualHeight <= maxHeight) {
+            readMoreBtn.style.display = 'none';
+            contentElement.classList.remove('short');
+        } else {
+            readMoreBtn.style.display = 'flex';
+            contentElement.classList.add('short');
+        }
+    }
+}
+
+// =============================================
+// Post Rendering Functions
+// =============================================
+
+function renderPosts(categorySlug = 'all') {
+    postsContainer.innerHTML = '';
+    
+    if (posts.length === 0) {
+        postsContainer.innerHTML = `
+            <div class="post-card" style="text-align: center; padding: 40px;">
+                <h3>Loading posts...</h3>
+                <p>Please wait while we load the content.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const filteredPosts = categorySlug === 'all' 
+        ? posts 
+        : posts.filter(post => post.categories.includes(categorySlug));
+    
+    if (filteredPosts.length === 0) {
+        postsContainer.innerHTML = `
+            <div class="post-card" style="text-align: center; padding: 40px;">
+                <h3>No posts found for this category</h3>
+                <p>Try selecting a different category</p>
+            </div>
+        `;
+        return;
+    }
+    
+    filteredPosts.forEach(post => {
+        const author = getAuthorById(post.authorId);
+        const postElement = createPostElement(post, author);
+        postsContainer.appendChild(postElement);
+    });
+    
+    setupReadMoreButtons();
+    setupMediaButtons();
+    
+    setTimeout(() => {
+        document.querySelectorAll('.post-content').forEach(checkContentHeight);
+    }, 100);
+}
+
+function createPostElement(post, author) {
+    const postElement = document.createElement('div');
+    postElement.className = `post-card ${post.featured ? 'featured' : ''}`;
+    
+    // Get translation for current language
+    const translation = translations[post.id]?.[currentLanguage] || {};
+    
+    postElement.innerHTML = `
+        <div class="post-header">
+            <img src="${author.avatar}" alt="${author.name}" class="post-avatar">
+            <div>
+                <div class="post-author">${author.name}</div>
+                <div class="post-role">${author.role}</div>
+                <div class="post-date">${formatDate(post.date)}</div>
+            </div>
+        </div>
+        
+        <div class="post-categories">
+            ${post.featured ? '<span class="featured-badge">Featured</span>' : ''}
+            ${post.categories.map(cat => `<span class="post-category">${cat}</span>`).join('')}
+        </div>
+        
+        <h3 class="post-title">${translation.title || post.title}</h3>
+        
+        <div class="post-content short" id="post-content-${post.id}">
+            ${translation.content || post.content}
+        </div>
+        
+        ${post.takeaway ? `
+        <div class="post-takeaway">
+            <div class="takeaway-label">Key Takeaway:</div>
+            <div class="takeaway-text">${translation.takeaway || post.takeaway}</div>
+        </div>
+        ` : ''}
+        
+        ${post.media ? `
+        <div class="post-media-link" data-media-id="${post.id}">
+            <div class="media-thumbnail-container">
+                <img src="${post.media.url}" alt="${post.media.caption}" class="media-thumbnail">
+                ${post.media.type === 'video' ? '<div class="video-play-icon"><i class="fas fa-play"></i></div>' : ''}
+            </div>
+            <div class="media-info">
+                <span class="media-type">${post.media.type === 'video' ? 'Video' : 'Image'}</span>
+                <span class="media-caption-preview">${post.media.caption}</span>
+            </div>
+        </div>
+        ` : ''}
+        
+        ${post.source ? `
+        <div class="post-source">
+            <div class="source-label">Source:</div>
+            <div class="source-text">${makeSourceClickable(translation.source || post.source)}</div>
+        </div>
+        ` : ''}
+        
+        <div class="post-actions">
+            <button class="read-more-btn" data-post-id="${post.id}">
+                <i class="fas fa-book-reader"></i> Read More
+            </button>
+            
+            ${post.media ? `
+            <button class="view-media-btn" data-media-id="${post.id}">
+                <i class="fas fa-photo-video"></i> View Media
+            </button>
+            ` : ''}
+        </div>
+    `;
+    
+    const translateBtn = createTranslationButton(post.id);
+    postElement.appendChild(translateBtn);
+    
+    // Set text direction based on current language
+    const dir = languages[currentLanguage]?.dir || 'ltr';
+    postElement.style.direction = dir;
+    postElement.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+    
+    return postElement;
+}
+
+function setupReadMoreButtons() {
+    document.querySelectorAll('.read-more-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            const contentElement = document.getElementById(`post-content-${postId}`);
+            
+            if (contentElement.classList.contains('short')) {
+                contentElement.classList.remove('short');
+                this.innerHTML = '<i class="fas fa-book"></i> Read Less';
+            } else {
+                contentElement.classList.add('short');
+                this.innerHTML = '<i class="fas fa-book-reader"></i> Read More';
+            }
+        });
+    });
+}
+
+function setupMediaButtons() {
+    document.querySelectorAll('.view-media-btn, .post-media-link').forEach(element => {
+        element.addEventListener('click', function() {
+            const postId = this.dataset.mediaId || this.closest('[data-media-id]')?.dataset.mediaId;
+            const post = posts.find(p => p.id == postId);
+            if (post && post.media) {
+                openMediaModal(post.media);
+            }
+        });
+    });
+}
+
+function filterPostsByCategory(e) {
+    const category = e.target.dataset.category;
+    
+    document.querySelectorAll('.category').forEach(cat => {
+        cat.classList.remove('active');
+    });
+    e.target.classList.add('active');
+    
+    renderPosts(category);
+}
+
+// =============================================
+// Team Members Rendering
+// =============================================
+
+function renderTeamMembers() {
+    teamMembersContainer.innerHTML = '';
+    
+    authors.forEach(author => {
+        const memberElement = document.createElement('div');
+        memberElement.className = 'team-member';
+        
+        let socialHTML = '';
+        if (author.social) {
+            socialHTML = `
+                <div class="member-social">
+                    ${author.social.tiktok ? `
+                        <a href="${author.social.tiktok}" target="_blank" class="member-social-icon" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    ` : ''}
+                    
+                    ${author.social.instagram ? `
+                        <a href="${author.social.instagram}" target="_blank" class="member-social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    ` : ''}
+                    
+                    ${author.social.upscrolled ? `
+                        <a href="${author.social.upscrolled}" target="_blank" class="member-social-icon" title="Upscrolled">
+                            <img src="https://ik.imagekit.io/ummahpress/G_pVEEvWYAA8qoX.png" alt="Upscrolled" class="upscrolled-icon-small">
+                        </a>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        memberElement.innerHTML = `
+            <img src="${author.avatar}" alt="${author.name}" class="member-avatar">
+            <h3 class="member-name">${author.name}</h3>
+            <div class="member-role">${author.role}</div>
+            <p class="member-bio">${author.bio}</p>
+            ${socialHTML}
+        `;
+        teamMembersContainer.appendChild(memberElement);
+    });
+}
+
+// =============================================
 // Page Navigation
 // =============================================
 
@@ -605,72 +634,18 @@ function renderCategories() {
     });
 }
 
-function filterPostsByCategory(e) {
-    const category = e.target.dataset.category;
-    
-    document.querySelectorAll('.category').forEach(cat => {
-        cat.classList.remove('active');
-    });
-    e.target.classList.add('active');
-    
-    renderPosts(category);
-}
-
-function renderTeamMembers() {
-    teamMembersContainer.innerHTML = '';
-    
-    authors.forEach(author => {
-        const memberElement = document.createElement('div');
-        memberElement.className = 'team-member';
-        
-        let socialHTML = '';
-        if (author.social) {
-            socialHTML = `
-                <div class="member-social">
-                    ${author.social.tiktok ? `
-                        <a href="${author.social.tiktok}" target="_blank" class="member-social-icon" title="TikTok">
-                            <i class="fab fa-tiktok"></i>
-                        </a>
-                    ` : ''}
-                    
-                    ${author.social.instagram ? `
-                        <a href="${author.social.instagram}" target="_blank" class="member-social-icon" title="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    ` : ''}
-                    
-                    ${author.social.upscrolled ? `
-                        <a href="${author.social.upscrolled}" target="_blank" class="member-social-icon" title="Upscrolled">
-                            <img src="https://ik.imagekit.io/ummahpress/G_pVEEvWYAA8qoX.png" alt="Upscrolled" class="upscrolled-icon-small">
-                        </a>
-                    ` : ''}
-                </div>
-            `;
-        }
-        
-        memberElement.innerHTML = `
-            <img src="${author.avatar}" alt="${author.name}" class="member-avatar">
-            <h3 class="member-name">${author.name}</h3>
-            <div class="member-role">${author.role}</div>
-            <p class="member-bio">${author.bio}</p>
-            ${socialHTML}
-        `;
-        teamMembersContainer.appendChild(memberElement);
-    });
-}
-
 // =============================================
 // App Initialization
 // =============================================
 
 async function initApp() {
-    console.log('🔧 Initializing Ummah Press...');
+    console.log('Initializing Ummah Press...');
     
     try {
-        // Set current year
+        // Set current year in footer
         currentYear.textContent = new Date().getFullYear();
         
-        // Setup mobile menu FIRST
+        // Setup mobile menu
         setupMobileMenu();
         
         // Setup navigation links
@@ -683,20 +658,34 @@ async function initApp() {
         });
         
         // Load data
-        await loadData();
+        const dataLoaded = await loadData();
         
-        // Set initial page
-        setActivePage('home');
-        
-        console.log('✅ Ummah Press initialized successfully!');
+        if (dataLoaded) {
+            // Set initial page
+            setActivePage('home');
+            console.log('Ummah Press initialized successfully!');
+        } else {
+            // Show loading error
+            postsContainer.innerHTML = `
+                <div class="post-card" style="text-align: center; padding: 40px;">
+                    <h3>Welcome to Ummah Press!</h3>
+                    <p>There was an issue loading the latest content.</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
     } catch (error) {
-        console.error('❌ App initialization error:', error);
+        console.error('App initialization error:', error);
+        
+        // Show friendly error
         postsContainer.innerHTML = `
             <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>Application Error</h3>
-                <p>There was an issue loading the content. Please refresh the page.</p>
-                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: var(--accent); border: none; border-radius: 5px; color: white; cursor: pointer;">
-                    Refresh Page
+                <h3>Welcome to Ummah Press</h3>
+                <p>We're experiencing technical difficulties. Please try again later.</p>
+                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                    Reload Page
                 </button>
             </div>
         `;
@@ -704,8 +693,4 @@ async function initApp() {
 }
 
 // Start app when DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
+document.addEventListener('DOMContentLoaded', initApp);
