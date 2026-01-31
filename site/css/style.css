@@ -876,6 +876,7 @@ body {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     border: 1px solid var(--border);
+    margin-top: 0 px;
 }
 
 .view-media-btn:hover {
