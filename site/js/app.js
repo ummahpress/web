@@ -1,4 +1,4 @@
-// Ummah Press App - Complete Version
+// Ummah Press App - Enhanced Version with Folder Structure
 
 // DOM Elements
 const body = document.body;
@@ -40,7 +40,7 @@ const languages = {
 let currentLanguage = localStorage.getItem('ummahpress-language') || 'en';
 
 // =============================================
-// Load Data from JSON Files
+// NEW: Load Posts from Folder Structure
 // =============================================
 
 async function loadData() {
@@ -49,17 +49,11 @@ async function loadData() {
         const authorsResponse = await fetch('data/authors.json');
         authors = await authorsResponse.json();
         
-        // Load posts
-        const postsResponse = await fetch('data/posts.json');
-        posts = await postsResponse.json();
+        // NEW: Load posts from posts folder
+        await loadPostsFromFolder();
         
-        // Load translations if available
-        try {
-            const translationsResponse = await fetch('data/translations.json');
-            translations = await translationsResponse.json();
-        } catch (error) {
-            console.log('No translations file found, continuing without translations.');
-        }
+        // NEW: Load translations from translations folder
+        await loadTranslationsFromFolder();
         
         return true;
     } catch (error) {
@@ -68,10 +62,86 @@ async function loadData() {
     }
 }
 
+async function loadPostsFromFolder() {
+    posts = [];
+    
+    // For now, we'll hardcode the post files. In a real system, you might have a post-index.json
+    // that lists all available posts, or you could use GitHub API to list files
+    const postFiles = [
+        'post-1.json',
+        'post-2.json'
+        // Add more post files as you create them
+    ];
+    
+    // Load each post file
+    for (const postFile of postFiles) {
+        try {
+            const response = await fetch(`data/posts/${postFile}`);
+            const post = await response.json();
+            posts.push(post);
+        } catch (error) {
+            console.error(`Error loading post ${postFile}:`, error);
+        }
+    }
+    
+    // Sort posts by date (newest first)
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+async function loadTranslationsFromFolder() {
+    translations = {};
+    
+    // For each post, check if it has translations
+    for (const post of posts) {
+        const postId = post.id;
+        
+        // Check for each language
+        for (const langCode in languages) {
+            try {
+                const response = await fetch(`data/translations/post-${postId}/${langCode}.json`);
+                const translation = await response.json();
+                
+                // Initialize post object if it doesn't exist
+                if (!translations[postId]) {
+                    translations[postId] = {};
+                }
+                
+                translations[postId][langCode] = translation;
+            } catch (error) {
+                // Translation file doesn't exist for this language
+                // That's okay, we'll use the default English content
+            }
+        }
+    }
+}
+
 // =============================================
-// Modal/Overlay Functions
+// NEW: Save Post to Folder Structure
 // =============================================
 
+// This function would be used if you want to add posts via a form in the future
+async function savePostToFolder(postData) {
+    const postId = postData.id || Date.now();
+    const postFile = `post-${postId}.json`;
+    
+    // Save post data
+    const postBlob = new Blob([JSON.stringify(postData, null, 2)], { type: 'application/json' });
+    
+    // Note: This would require a backend in a real application
+    // For GitHub Pages, you would need to use GitHub API or manual file upload
+    console.log('To add a post manually:');
+    console.log(`1. Create data/posts/${postFile}`);
+    console.log(`2. Add the post JSON content`);
+    console.log(`3. Commit and push to GitHub`);
+    
+    return postId;
+}
+
+// =============================================
+// Rest of the functions remain the same...
+// =============================================
+
+// Modal/Overlay Functions
 function openMediaModal(media) {
     let modal = document.getElementById('mediaModal');
     if (!modal) {
@@ -328,12 +398,9 @@ function renderPosts(categorySlug = 'all') {
         return;
     }
     
-    // Sort posts by date (newest first)
-    const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
-    
     const filteredPosts = categorySlug === 'all' 
-        ? sortedPosts 
-        : sortedPosts.filter(post => post.categories.includes(categorySlug));
+        ? posts 
+        : posts.filter(post => post.categories.includes(categorySlug));
     
     if (filteredPosts.length === 0) {
         postsContainer.innerHTML = `
@@ -463,7 +530,7 @@ function filterPostsByCategory(e) {
 }
 
 // =============================================
-// Team Members Rendering (with Social Media)
+// Team Members Rendering
 // =============================================
 
 function renderTeamMembers() {
