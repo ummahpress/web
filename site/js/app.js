@@ -42,14 +42,14 @@ let currentLanguage = localStorage.getItem('ummahpress-language') || 'en';
 // =============================================
 
 function openSidebar() {
-    sidebar.classList.add('active');
-    sidebarOverlay.classList.add('active');
+    if (sidebar) sidebar.classList.add('active');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeSidebar() {
-    sidebar.classList.remove('active');
-    sidebarOverlay.classList.remove('active');
+    if (sidebar) sidebar.classList.remove('active');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
@@ -109,15 +109,17 @@ async function loadData() {
         console.error('Error loading data:', error);
         
         // Show error message
-        postsContainer.innerHTML = `
-            <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>Data Loading Error</h3>
-                <p>Could not load content. Check console for details.</p>
-                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
-                    Reload Page
-                </button>
-            </div>
-        `;
+        if (postsContainer) {
+            postsContainer.innerHTML = `
+                <div class="post-card" style="text-align: center; padding: 40px;">
+                    <h3>Data Loading Error</h3>
+                    <p>Could not load content. Check console for details.</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                        Reload Page
+                    </button>
+                </div>
+            `;
+        }
         return false;
     }
 }
@@ -193,13 +195,13 @@ function openMediaModal(media) {
     const captionElement = document.getElementById('modalCaption');
     const creditElement = document.getElementById('modalCredit');
     
-    mediaContainer.innerHTML = '';
-    captionElement.textContent = '';
-    creditElement.textContent = '';
+    if (mediaContainer) mediaContainer.innerHTML = '';
+    if (captionElement) captionElement.textContent = '';
+    if (creditElement) creditElement.textContent = '';
     
-    if (media.type === 'image') {
+    if (media.type === 'image' && mediaContainer) {
         mediaContainer.innerHTML = `<img src="${media.url}" alt="${media.caption}" class="modal-image">`;
-    } else if (media.type === 'video') {
+    } else if (media.type === 'video' && mediaContainer) {
         mediaContainer.innerHTML = `
             <div class="modal-video-container">
                 <iframe src="${media.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -207,8 +209,8 @@ function openMediaModal(media) {
         `;
     }
     
-    captionElement.textContent = media.caption;
-    if (media.credit) {
+    if (captionElement) captionElement.textContent = media.caption;
+    if (media.credit && creditElement) {
         creditElement.textContent = `📷 ${media.credit}`;
     }
     
@@ -378,6 +380,8 @@ function checkContentHeight(contentElement) {
 // =============================================
 
 function renderPosts(categorySlug = 'all') {
+    if (!postsContainer) return;
+    
     postsContainer.innerHTML = '';
     
     if (posts.length === 0) {
@@ -503,10 +507,10 @@ function setupReadMoreButtons() {
             const postId = this.dataset.postId;
             const contentElement = document.getElementById(`post-content-${postId}`);
             
-            if (contentElement.classList.contains('short')) {
+            if (contentElement && contentElement.classList.contains('short')) {
                 contentElement.classList.remove('short');
                 this.innerHTML = '<i class="fas fa-book"></i> Read Less';
-            } else {
+            } else if (contentElement) {
                 contentElement.classList.add('short');
                 this.innerHTML = '<i class="fas fa-book-reader"></i> Read More';
             }
@@ -542,6 +546,8 @@ function filterPostsByCategory(e) {
 // =============================================
 
 function renderTeamMembers() {
+    if (!teamMembersContainer) return;
+    
     teamMembersContainer.innerHTML = '';
     
     authors.forEach(author => {
@@ -590,15 +596,15 @@ function renderTeamMembers() {
 
 function setActivePage(page) {
     if (page === 'home') {
-        homePage.classList.remove('hidden');
-        aboutPage.classList.add('hidden');
-        pageTitle.textContent = 'Ummah Press: Rapid News Update';
+        if (homePage) homePage.classList.remove('hidden');
+        if (aboutPage) aboutPage.classList.add('hidden');
+        if (pageTitle) pageTitle.textContent = 'Ummah Press: Rapid News Update';
         renderCategories();
         renderPosts();
     } else {
-        homePage.classList.add('hidden');
-        aboutPage.classList.remove('hidden');
-        pageTitle.textContent = 'About Us';
+        if (homePage) homePage.classList.add('hidden');
+        if (aboutPage) aboutPage.classList.remove('hidden');
+        if (pageTitle) pageTitle.textContent = 'About Us';
         renderTeamMembers();
     }
     
@@ -615,6 +621,8 @@ function setActivePage(page) {
 }
 
 function renderCategories() {
+    if (!categoriesContainer) return;
+    
     categoriesContainer.innerHTML = '';
     
     const allCategory = document.createElement('div');
@@ -643,7 +651,9 @@ async function initApp() {
     
     try {
         // Set current year in footer
-        currentYear.textContent = new Date().getFullYear();
+        if (currentYear) {
+            currentYear.textContent = new Date().getFullYear();
+        }
         
         // Setup mobile menu
         setupMobileMenu();
@@ -666,29 +676,33 @@ async function initApp() {
             console.log('Ummah Press initialized successfully!');
         } else {
             // Show loading error
-            postsContainer.innerHTML = `
-                <div class="post-card" style="text-align: center; padding: 40px;">
-                    <h3>Welcome to Ummah Press!</h3>
-                    <p>There was an issue loading the latest content.</p>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
-                        Try Again
-                    </button>
-                </div>
-            `;
+            if (postsContainer) {
+                postsContainer.innerHTML = `
+                    <div class="post-card" style="text-align: center; padding: 40px;">
+                        <h3>Welcome to Ummah Press!</h3>
+                        <p>There was an issue loading the latest content.</p>
+                        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
         }
     } catch (error) {
         console.error('App initialization error:', error);
         
         // Show friendly error
-        postsContainer.innerHTML = `
-            <div class="post-card" style="text-align: center; padding: 40px;">
-                <h3>Welcome to Ummah Press</h3>
-                <p>We're experiencing technical difficulties. Please try again later.</p>
-                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
-                    Reload Page
-                </button>
-            </div>
-        `;
+        if (postsContainer) {
+            postsContainer.innerHTML = `
+                <div class="post-card" style="text-align: center; padding: 40px;">
+                    <h3>Welcome to Ummah Press</h3>
+                    <p>We're experiencing technical difficulties. Please try again later.</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ff9800; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                        Reload Page
+                    </button>
+                </div>
+            `;
+        }
     }
 }
 
