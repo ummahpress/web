@@ -701,7 +701,7 @@ body {
 
 /* Media Link Styles */
 .post-media-link {
-    display: none;
+    display: none !important;
     margin: 20px 0;
     padding: 15px;
     background-color: var(--hover);
