@@ -253,7 +253,7 @@ body {
     justify-content: space-between;
     padding: 0 20px;
     position: sticky;
-    top: 0;
+    top: 5px;
     z-index: 99;
     gap: 15px;
     flex-wrap: nowrap;
@@ -279,7 +279,7 @@ body {
 }
 
 .header-logo {
-    height: 35px;
+    height: 50px;
     width: auto;
     object-fit: contain;
     max-width: 120px;
