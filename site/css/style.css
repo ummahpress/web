@@ -253,7 +253,7 @@ body {
     justify-content: space-between;
     padding: 0 20px;
     position: sticky;
-    top: 5px;
+    top: 0px;
     z-index: 99;
     gap: 15px;
     flex-wrap: nowrap;
