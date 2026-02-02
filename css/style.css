@@ -1390,7 +1390,7 @@ body {
 /* Hide logo on very small screens */
 @media (max-width: 350px) {
     .header-logo {
-        display: none;
+        display: block !important;
     }
     
     .header-logo-title {
