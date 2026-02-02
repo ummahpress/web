@@ -1391,6 +1391,7 @@ body {
 @media (max-width: 350px) {
     .header-logo {
         display: block !important;
+        max-width: 80px;
     }
     
     .header-logo-title {
