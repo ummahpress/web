@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Ummah Step",
+    "role": "Founder & Editor-in-Chief",
+    "avatar": "https://ik.imagekit.io/ummahpress/photo_2026-01-27_22-12-46.jpg",
+    "bio": "Ummah Step is the visionary behind Ummah Press, with years of experience in journalism and media. Her passion for delivering accurate and timely news to the Muslim community drives the mission of Ummah Press.",
+    "social": {
+      "tiktok": "https://www.tiktok.com/@ummahstep",
+      "instagram": "https://www.instagram.com/ummahstep",
+      "upscrolled": "https://upscrolled.com/@ummahstep"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Rizky Al indunisi",
+    "role": "Tech Specialist & International Correspondent",
+    "avatar": "https://ik.imagekit.io/ummahpress/photo_2026-01-27_22-12-46%20(2).jpg",
+    "bio": "Rizky Al indunisi brings extensive reporting experience from conflict zones and international events. His dedication to truthful reporting and deep understanding of global affairs makes him an invaluable asset to our team.",
+    "social": {
+      "tiktok": "https://www.tiktok.com/@rizkyalindunisi",
+      "instagram": "https://www.instagram.com/rizkyalindunisi",
+      "upscrolled": "https://upscrolled.com/@rizkyalindunisi"
+    }
+  }
+]
