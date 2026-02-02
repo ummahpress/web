@@ -151,7 +151,7 @@ async function loadPosts() {
         // Filter out null posts and sort by date (newest first)
         return loadedPosts
             .filter(post => post !== null)
-            .sort((a, b) => new Date(b.date) - new Date(a.date));
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
     } catch (error) {
         console.error('Error loading posts:', error);
         return [];
